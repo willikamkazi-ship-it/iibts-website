@@ -1,0 +1,33 @@
+name: OBTS website checks
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: website-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Pages are generated from tools/build_site.py
+        run: python3 tools/build_site.py --check
+      - name: Local links, metadata and registration behavior
+        run: |
+          python3 tools/check_static.py
+          node tools/check_registration.cjs
+      - name: Install Chromium for the browser tests
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Browser tests (phone and desktop, EN/SW/FR)
+        run: node tools/check_site.cjs

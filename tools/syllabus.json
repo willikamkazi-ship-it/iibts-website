@@ -1,0 +1,877 @@
+{
+ "source": "odm-ai-asistant curriculum.py (GB, B66, PE, ES, CL, ENT) and production/ai_course.py (AI, proposed v2), branch ci-review/phase2-4-staff-auth, 2026-10-02",
+ "courses": {
+  "GB": {
+   "master": "en",
+   "modules": [
+    {
+     "code": "GB-M01",
+     "title": {
+      "en": "Introduction to Bible and Theology"
+     },
+     "lessons": 10
+    },
+    {
+     "code": "GB-M02",
+     "title": {
+      "en": "Bibliology — Doctrine of Scripture"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M03",
+     "title": {
+      "en": "Theology Proper — Doctrine of God"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M04",
+     "title": {
+      "en": "Creation and the Spiritual World"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M05",
+     "title": {
+      "en": "Anthropology — Doctrine of Humanity"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M06",
+     "title": {
+      "en": "Hamartiology — Doctrine of Sin"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M07",
+     "title": {
+      "en": "Christology — Doctrine of Jesus Christ"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M08",
+     "title": {
+      "en": "Soteriology — Doctrine of Salvation"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M09",
+     "title": {
+      "en": "Pneumatology — Doctrine of the Holy Spirit"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M10",
+     "title": {
+      "en": "Angelology and Demonology"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M11",
+     "title": {
+      "en": "Ecclesiology — Doctrine of the Church"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M12",
+     "title": {
+      "en": "Prayer, Worship and Spiritual Formation"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M13",
+     "title": {
+      "en": "Old Testament and Salvation History"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M14",
+     "title": {
+      "en": "New Testament and the Kingdom of God"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M15",
+     "title": {
+      "en": "Hermeneutics and Bible Study Methods"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M16",
+     "title": {
+      "en": "Homiletics and Ministry of the Word"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M17",
+     "title": {
+      "en": "Christian Ethics and Christian Living"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M18",
+     "title": {
+      "en": "Missiology and Evangelism"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M19",
+     "title": {
+      "en": "Christian Leadership and Pastoral Foundations"
+     },
+     "lessons": null
+    },
+    {
+     "code": "GB-M20",
+     "title": {
+      "en": "Eschatology — Doctrine of Last Things"
+     },
+     "lessons": null
+    }
+   ]
+  },
+  "B66": {
+   "master": "en",
+   "modules": [
+    {
+     "code": "B66-M01",
+     "title": {
+      "en": "Introduction to the Bible and Biblical Canon"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M02",
+     "title": {
+      "en": "The Pentateuch"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M03",
+     "title": {
+      "en": "Historical Books I"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M04",
+     "title": {
+      "en": "Historical Books II"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M05",
+     "title": {
+      "en": "Poetry and Wisdom Literature"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M06",
+     "title": {
+      "en": "Major Prophets"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M07",
+     "title": {
+      "en": "Minor Prophets"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M08",
+     "title": {
+      "en": "The Four Gospels"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M09",
+     "title": {
+      "en": "Acts and the Early Church"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M10",
+     "title": {
+      "en": "Pauline Epistles"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M11",
+     "title": {
+      "en": "General Epistles"
+     },
+     "lessons": null
+    },
+    {
+     "code": "B66-M12",
+     "title": {
+      "en": "Revelation and the Unity of the Biblical Story"
+     },
+     "lessons": null
+    }
+   ]
+  },
+  "PE": {
+   "master": "en",
+   "modules": [
+    {
+     "code": "PE-M01",
+     "title": {
+      "en": "Foundations of Pastoral English"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M02",
+     "title": {
+      "en": "English for Bible Reading and Explanation"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M03",
+     "title": {
+      "en": "English for Prayer"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M04",
+     "title": {
+      "en": "English for Preaching and Teaching"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M05",
+     "title": {
+      "en": "English for Worship Services"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M06",
+     "title": {
+      "en": "Pastoral Conversations and Counselling"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M07",
+     "title": {
+      "en": "English for Evangelism and Discipleship"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M08",
+     "title": {
+      "en": "English for Leadership and Church Administration"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M09",
+     "title": {
+      "en": "Pastoral Writing and Digital Communication"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M10",
+     "title": {
+      "en": "Theology and Academic English for Ministers"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M11",
+     "title": {
+      "en": "Public Speaking, Pronunciation and Ministry Communication"
+     },
+     "lessons": null
+    },
+    {
+     "code": "PE-M12",
+     "title": {
+      "en": "Advanced Pastoral English Practicum"
+     },
+     "lessons": null
+    }
+   ]
+  },
+  "ES": {
+   "master": "en",
+   "modules": [
+    {
+     "code": "ES-M01",
+     "title": {
+      "en": "Foundations of Spoken English"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M02",
+     "title": {
+      "en": "Essential English Grammar"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M03",
+     "title": {
+      "en": "Tenses for Everyday Communication"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M04",
+     "title": {
+      "en": "Everyday Vocabulary and Conversations"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M05",
+     "title": {
+      "en": "Questions, Answers and Interactive Conversation"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M06",
+     "title": {
+      "en": "Pronunciation and Listening Skills"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M07",
+     "title": {
+      "en": "Building Fluency and Speaking Confidence"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M08",
+     "title": {
+      "en": "Reading and Comprehension"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M09",
+     "title": {
+      "en": "Practical Writing and Written Communication"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M10",
+     "title": {
+      "en": "English for Work, Study and Professional Life"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M11",
+     "title": {
+      "en": "Advanced Grammar and Natural English"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ES-M12",
+     "title": {
+      "en": "Advanced Speaking and Communication Practicum"
+     },
+     "lessons": null
+    }
+   ]
+  },
+  "CL": {
+   "master": "en",
+   "modules": [
+    {
+     "code": "CL-M01",
+     "title": {
+      "en": "Foundations of Christian Leadership"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M02",
+     "title": {
+      "en": "Biblical Models of Leadership"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M03",
+     "title": {
+      "en": "Character, Integrity and Spiritual Formation"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M04",
+     "title": {
+      "en": "Calling, Vision and Mission"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M05",
+     "title": {
+      "en": "Servant Leadership and the Leadership of Jesus"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M06",
+     "title": {
+      "en": "Communication and Public Leadership"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M07",
+     "title": {
+      "en": "Team Building, Delegation and Development"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M08",
+     "title": {
+      "en": "Decision-Making and Problem Solving"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M09",
+     "title": {
+      "en": "Conflict Management and Reconciliation"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M10",
+     "title": {
+      "en": "Church Governance and Administration"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M11",
+     "title": {
+      "en": "Stewardship, Finance and Resource Management"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M12",
+     "title": {
+      "en": "Ethics, Power and Leadership Accountability"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M13",
+     "title": {
+      "en": "Strategic Leadership and Organizational Growth"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M14",
+     "title": {
+      "en": "Pastoral and People-Centred Leadership"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M15",
+     "title": {
+      "en": "Leadership in Crisis and Change"
+     },
+     "lessons": null
+    },
+    {
+     "code": "CL-M16",
+     "title": {
+      "en": "Multiplication, Mentoring and Succession"
+     },
+     "lessons": null
+    }
+   ]
+  },
+  "ENT": {
+   "master": "en",
+   "modules": [
+    {
+     "code": "ENT-M01",
+     "title": {
+      "en": "Foundations of Entrepreneurship"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M02",
+     "title": {
+      "en": "Discovering and Evaluating Business Opportunities"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M03",
+     "title": {
+      "en": "Business Models and Value Proposition"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M04",
+     "title": {
+      "en": "Market Research and Customer Understanding"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M05",
+     "title": {
+      "en": "Business Planning and Startup Strategy"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M06",
+     "title": {
+      "en": "Marketing, Branding and Sales"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M07",
+     "title": {
+      "en": "Digital Business and Online Marketing"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M08",
+     "title": {
+      "en": "Financial Literacy for Entrepreneurs"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M09",
+     "title": {
+      "en": "Pricing, Costing and Profitability"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M10",
+     "title": {
+      "en": "Business Operations and Systems"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M11",
+     "title": {
+      "en": "Customer Service and Relationship Management"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M12",
+     "title": {
+      "en": "People, Teams and Human Resource Management"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M13",
+     "title": {
+      "en": "Business Law, Compliance and Risk Management"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M14",
+     "title": {
+      "en": "Funding and Business Finance"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M15",
+     "title": {
+      "en": "Growth, Scaling and Expansion"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M16",
+     "title": {
+      "en": "Innovation and Competitive Strategy"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M17",
+     "title": {
+      "en": "Business Leadership and Decision-Making"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M18",
+     "title": {
+      "en": "Biblical Stewardship and Business Ethics"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M19",
+     "title": {
+      "en": "Sustainable Business and Social Impact"
+     },
+     "lessons": null
+    },
+    {
+     "code": "ENT-M20",
+     "title": {
+      "en": "Building a Business That Can Operate Without the Founder"
+     },
+     "lessons": null
+    }
+   ]
+  },
+  "AI": {
+   "master": "sw",
+   "proposed": true,
+   "modules": [
+    {
+     "code": "AI-M01",
+     "title": {
+      "sw": "AI ni nini, inakosea wapi na jinsi ya kuhakiki",
+      "en": "What AI is, where it goes wrong and how to check it",
+      "fr": "Ce qu'est l'IA, où elle se trompe et comment la vérifier"
+     },
+     "grade": "IV",
+     "track": "maandishi",
+     "lessons": 5,
+     "days": 12
+    },
+    {
+     "code": "AI-M02",
+     "title": {
+      "sw": "Kuandika maelekezo (prompt) yanayotoa kazi inayotumika",
+      "en": "Writing instructions (prompts) that produce usable work",
+      "fr": "Écrire des consignes (prompts) qui donnent un travail utilisable"
+     },
+     "grade": "IV",
+     "track": "maandishi",
+     "lessons": 5,
+     "days": 12
+    },
+    {
+     "code": "AI-M03",
+     "title": {
+      "sw": "Utafiti na ripoti fupi yenye vyanzo",
+      "en": "Research and a short report with sources",
+      "fr": "Recherche et court rapport avec sources"
+     },
+     "grade": "IV",
+     "track": "maandishi",
+     "lessons": 5,
+     "days": 12
+    },
+    {
+     "code": "AI-M04",
+     "title": {
+      "sw": "Maudhui na tangazo lililohakikiwa",
+      "en": "Verified content and an advertisement",
+      "fr": "Contenu et annonce vérifiés"
+     },
+     "grade": "IV",
+     "track": "maandishi",
+     "lessons": 5,
+     "days": 12
+    },
+    {
+     "code": "AI-M05V",
+     "title": {
+      "sw": "Video: wazo, script na storyboard",
+      "en": "Video: idea, script and storyboard",
+      "fr": "Vidéo : idée, script et storyboard"
+     },
+     "grade": "III",
+     "track": "video",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M06V",
+     "title": {
+      "sw": "Video: kurekodi picha, clips na sauti",
+      "en": "Video: shooting images, clips and sound",
+      "fr": "Vidéo : tourner images, clips et son"
+     },
+     "grade": "III",
+     "track": "video",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M07V",
+     "title": {
+      "sw": "Video: kuhariri, captions na export",
+      "en": "Video: editing, captions and export",
+      "fr": "Vidéo : montage, sous-titres et export"
+     },
+     "grade": "III",
+     "track": "video",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M05A",
+     "title": {
+      "sw": "Audio: kupanga na kuandika script ya sauti",
+      "en": "Audio: planning and writing an audio script",
+      "fr": "Audio : préparer et écrire un script audio"
+     },
+     "grade": "III",
+     "track": "audio",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M06A",
+     "title": {
+      "sw": "Audio: kurekodi sauti safi",
+      "en": "Audio: recording clean sound",
+      "fr": "Audio : enregistrer un son propre"
+     },
+     "grade": "III",
+     "track": "audio",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M07A",
+     "title": {
+      "sw": "Audio: kuhariri, muziki na export",
+      "en": "Audio: editing, music and export",
+      "fr": "Audio : montage, musique et export"
+     },
+     "grade": "III",
+     "track": "audio",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M08",
+     "title": {
+      "sw": "Tovuti: kupanga kurasa na maudhui",
+      "en": "Website: planning pages and content",
+      "fr": "Site web : planifier les pages et le contenu"
+     },
+     "grade": "II",
+     "track": "tovuti",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M09",
+     "title": {
+      "sw": "Tovuti: kujenga kwa Google Sites",
+      "en": "Website: building with Google Sites",
+      "fr": "Site web : construire avec Google Sites"
+     },
+     "grade": "II",
+     "track": "tovuti",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M10",
+     "title": {
+      "sw": "Tovuti: mawasiliano, kuchapisha na kujaribu",
+      "en": "Website: contact, publishing and testing",
+      "fr": "Site web : contact, publication et tests"
+     },
+     "grade": "II",
+     "track": "tovuti",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M11",
+     "title": {
+      "sw": "Mradi wa mwisho: kupanga",
+      "en": "Final project: planning",
+      "fr": "Projet final : planification"
+     },
+     "grade": "I",
+     "track": "mradi",
+     "lessons": 3,
+     "days": 8
+    },
+    {
+     "code": "AI-M12",
+     "title": {
+      "sw": "Mradi wa mwisho: kutengeneza na kujaribu",
+      "en": "Final project: building and testing",
+      "fr": "Projet final : réalisation et tests"
+     },
+     "grade": "I",
+     "track": "mradi",
+     "lessons": 3,
+     "days": 10
+    },
+    {
+     "code": "AI-M13",
+     "title": {
+      "sw": "Mradi wa mwisho: kuwasilisha na kuendeleza",
+      "en": "Final project: presenting and continuing",
+      "fr": "Projet final : présentation et suite"
+     },
+     "grade": "I",
+     "track": "mradi",
+     "lessons": 3,
+     "days": 6
+    }
+   ]
+  }
+ }
+}
