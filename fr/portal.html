@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
 <title>Tableau de bord de l&#x27;étudiant | OBTS</title>
 <meta name="description" content="Une seule page pour vos études.">
 <link rel="canonical" href="https://obts.co.tz/fr/portal.html">
@@ -33,7 +34,12 @@
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
 <nav class="nav" id="site-nav" aria-label="Menu"><a href="index.html">Accueil</a><a href="about.html">À propos</a><a href="courses.html">Cours</a><a href="admissions.html">Inscription</a><a href="library.html">Bibliothèque</a><a href="portal.html" aria-current="page">Tableau de bord</a><a href="contact.html">Contact</a><a href="faq.html">Questions</a><div class="lang" role="group" aria-label="Langue"><a href="../portal.html" hreflang="en" lang="en" title="English">EN</a><a href="../sw/portal.html" hreflang="sw" lang="sw" title="Kiswahili">SW</a><a href="../fr/portal.html" hreflang="fr" lang="fr" title="Français" aria-current="true">FR</a></div></nav>
 </div></header>
-<main id="main"><section class="page-head"><div class="wrap"><h1>Tableau de bord de l&#x27;étudiant</h1><p>Une seule page pour vos études.</p></div></section><div class="wrap section"><div class="note gold"><strong>Pas encore ouvert.</strong> Ce service a été construit et testé dans un environnement de test ; il ouvrira seulement lorsque l&#x27;école approuvera le lancement. D&#x27;ici là, demandez sur WhatsApp. <a href="https://wa.me/255704686885">Demander sur WhatsApp</a></div><h2>Ce qu'il affiche</h2><div class="grid">
+<main id="main"><section class="page-head"><div class="wrap"><h1>Tableau de bord de l&#x27;étudiant</h1><p>Une seule page pour vos études.</p></div></section><div class="wrap section"><div class="note gold"><strong>Pas encore ouvert.</strong> Ce service a été construit et testé dans un environnement de test ; il ouvrira seulement lorsque l&#x27;école approuvera le lancement. D&#x27;ici là, demandez sur WhatsApp. <a href="https://wa.me/255704686885">Demander sur WhatsApp</a></div><section class="note"><h2>Vous avez votre lien personnel étudiant ?</h2><p>Collez le lien personnel reçu sur WhatsApp. Il ouvre votre compte existant ; aucune nouvelle inscription n’est nécessaire. Demandez un nouveau lien sur WhatsApp OBTS si le vôtre a expiré.</p>
+<form id="campus-entry" data-origin="https://odm-ai-asistant.onrender.com" data-target="/dashboard" data-language="fr" data-error="Utilisez le lien personnel complet du tableau de bord envoyé par OBTS. Ne saisissez ni mot de passe ni numéro de téléphone." novalidate>
+<div class="field"><label for="campus-link">Votre lien du tableau de bord OBTS</label><input type="url" id="campus-link" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="campus-privacy" required></div>
+<p class="error" role="alert"></p><button class="btn navy" type="submit" disabled>Ouvrir mon tableau de bord</button>
+<p class="hint" id="campus-privacy">Le lien est vérifié sur cet appareil et n&#x27;est pas enregistré par ce site. Gardez-le privé.</p>
+<noscript><p><a href="https://wa.me/255704686885">Demander sur WhatsApp</a></p></noscript></form></section><h2>Ce qu'il affiche</h2><div class="grid">
 <div class="card"><h3>Cours et progrès</h3><p>Les cours que vous pouvez ouvrir et où vous en êtes dans chacun.</p></div>
 <div class="card"><h3>Prochaine leçon</h3><p>La leçon à étudier ensuite.</p></div>
 <div class="card"><h3>Tâches et retours</h3><p>Les tâches envoyées et les retours de votre enseignant. Une note n'apparaît que si un enseignant l'a donnée.</p></div>
@@ -46,6 +52,7 @@
 <div><h3>Contact</h3><ul><li>WhatsApp: <a href="https://wa.me/255704686885">+255 704 686 885</a></li><li>obts.co.tz</li></ul></div>
 </div><div class="copy">© 2026 Online Bible &amp; Theology School</div></div></footer>
 <a class="wa-float" href="https://wa.me/255704686885" aria-label="WhatsApp +255 704 686 885">WhatsApp</a>
+<script src="../assets/js/campus-link.js"></script>
 <script src="../assets/js/site.js"></script>
 </body>
 </html>

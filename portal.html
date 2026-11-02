@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
 <title>Student dashboard | OBTS</title>
 <meta name="description" content="One page for your studies.">
 <link rel="canonical" href="https://obts.co.tz/portal.html">
@@ -33,7 +34,12 @@
 <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
 <nav class="nav" id="site-nav" aria-label="Menu"><a href="index.html">Home</a><a href="about.html">About</a><a href="courses.html">Courses</a><a href="admissions.html">Admissions</a><a href="library.html">Library</a><a href="portal.html" aria-current="page">Dashboard</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a><div class="lang" role="group" aria-label="Language"><a href="portal.html" hreflang="en" lang="en" title="English" aria-current="true">EN</a><a href="sw/portal.html" hreflang="sw" lang="sw" title="Kiswahili">SW</a><a href="fr/portal.html" hreflang="fr" lang="fr" title="Français">FR</a></div></nav>
 </div></header>
-<main id="main"><section class="page-head"><div class="wrap"><h1>Student dashboard</h1><p>One page for your studies.</p></div></section><div class="wrap section"><div class="note gold"><strong>Not yet open.</strong> This service has been built and tested in a test environment; it opens only when the school approves the launch. Until then, ask on WhatsApp. <a href="https://wa.me/255704686885">Ask on WhatsApp</a></div><h2>What it shows</h2><div class="grid">
+<main id="main"><section class="page-head"><div class="wrap"><h1>Student dashboard</h1><p>One page for your studies.</p></div></section><div class="wrap section"><div class="note gold"><strong>Not yet open.</strong> This service has been built and tested in a test environment; it opens only when the school approves the launch. Until then, ask on WhatsApp. <a href="https://wa.me/255704686885">Ask on WhatsApp</a></div><section class="note"><h2>Have your personal student link?</h2><p>Paste the personal link sent to your WhatsApp. It opens your existing account; you do not need to register again. An expired link must be renewed through OBTS WhatsApp.</p>
+<form id="campus-entry" data-origin="https://odm-ai-asistant.onrender.com" data-target="/dashboard" data-language="en" data-error="Use the complete personal dashboard link sent by OBTS. Do not enter a password or a phone number." novalidate>
+<div class="field"><label for="campus-link">Your OBTS dashboard link</label><input type="url" id="campus-link" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="campus-privacy" required></div>
+<p class="error" role="alert"></p><button class="btn navy" type="submit" disabled>Open my dashboard</button>
+<p class="hint" id="campus-privacy">Your link is checked on this device and is not saved by this website. Keep it private.</p>
+<noscript><p><a href="https://wa.me/255704686885">Ask on WhatsApp</a></p></noscript></form></section><h2>What it shows</h2><div class="grid">
 <div class="card"><h3>Courses and progress</h3><p>The courses you may open and where you are in each.</p></div>
 <div class="card"><h3>Next lesson</h3><p>The lesson to study next.</p></div>
 <div class="card"><h3>Tasks and feedback</h3><p>The tasks you sent and your lecturer's feedback. A mark is shown only when a lecturer gave it.</p></div>
@@ -46,6 +52,7 @@
 <div><h3>Contact</h3><ul><li>WhatsApp: <a href="https://wa.me/255704686885">+255 704 686 885</a></li><li>obts.co.tz</li></ul></div>
 </div><div class="copy">© 2026 Online Bible &amp; Theology School</div></div></footer>
 <a class="wa-float" href="https://wa.me/255704686885" aria-label="WhatsApp +255 704 686 885">WhatsApp</a>
+<script src="assets/js/campus-link.js"></script>
 <script src="assets/js/site.js"></script>
 </body>
 </html>

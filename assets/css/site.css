@@ -94,7 +94,7 @@ details > div { padding: 0 16px 14px; }
 form.reg { background: #fff; border-radius: var(--radius); padding: 20px; border-top: 4px solid var(--gold); }
 .field { margin: 0 0 16px; }
 .field label, .field legend { display: block; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
-.field input[type=text], .field input[type=tel], .field select, .field textarea {
+.field input[type=text], .field input[type=tel], .field input[type=url], .field select, .field textarea {
   width: 100%; font: 1rem var(--sans); padding: 11px 12px; border: 1px solid #b9c6cf; border-radius: 8px; background: #fff; color: var(--ink); }
 .field textarea { min-height: 96px; }
 fieldset.field { border: 0; padding: 0; }

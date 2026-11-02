@@ -178,6 +178,35 @@ def course_cards(lang, link_prefix=""):
 
 SERVICES = ("library", "bookstore", "portal", "assistant")
 
+# Existing backend endpoints. No credentials or student links belong in source.
+CAMPUS_ORIGIN = "https://odm-ai-asistant.onrender.com"
+CAMPUS_TEXT = {
+    "en": {"title": "Have your personal student link?", "label": "Your OBTS dashboard link",
+           "help": "Paste the personal link sent to your WhatsApp. It opens your existing account; you do not need to register again. An expired link must be renewed through OBTS WhatsApp.",
+           "button": "Open my dashboard", "library": "Open my library", "error": "Use the complete personal dashboard link sent by OBTS. Do not enter a password or a phone number.",
+           "privacy": "Your link is checked on this device and is not saved by this website. Keep it private."},
+    "sw": {"title": "Una kiungo chako cha mwanafunzi?", "label": "Kiungo chako cha dashboard ya OBTS",
+           "help": "Bandika kiungo binafsi ulichotumiwa WhatsApp. Kitafungua akaunti yako iliyopo; huhitaji kujisajili upya. Kiungo kilichokwisha muda kinaombwa upya kupitia WhatsApp ya OBTS.",
+           "button": "Fungua dashboard yangu", "library": "Fungua maktaba yangu", "error": "Tumia kiungo kamili cha dashboard ulichotumiwa na OBTS. Usiweke nenosiri wala namba ya simu.",
+           "privacy": "Kiungo kinakaguliwa kwenye kifaa hiki na hakihifadhiwi na website. Kiweke kwa siri."},
+    "fr": {"title": "Vous avez votre lien personnel étudiant ?", "label": "Votre lien du tableau de bord OBTS",
+           "help": "Collez le lien personnel reçu sur WhatsApp. Il ouvre votre compte existant ; aucune nouvelle inscription n’est nécessaire. Demandez un nouveau lien sur WhatsApp OBTS si le vôtre a expiré.",
+           "button": "Ouvrir mon tableau de bord", "library": "Ouvrir ma bibliothèque", "error": "Utilisez le lien personnel complet du tableau de bord envoyé par OBTS. Ne saisissez ni mot de passe ni numéro de téléphone.",
+           "privacy": "Le lien est vérifié sur cet appareil et n'est pas enregistré par ce site. Gardez-le privé."},
+}
+
+
+def campus_entry(lang, page):
+    w = CAMPUS_TEXT[lang]
+    target = "/library" if page == "library" else "/dashboard"
+    label = w["library"] if page == "library" else w["button"]
+    return f'''<section class="note"><h2>{e(w["title"])}</h2><p>{e(w["help"])}</p>
+<form id="campus-entry" data-origin="{CAMPUS_ORIGIN}" data-target="{target}" data-language="{lang}" data-error="{e(w["error"])}" novalidate>
+<div class="field"><label for="campus-link">{e(w["label"])}</label><input type="url" id="campus-link" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="campus-privacy" required></div>
+<p class="error" role="alert"></p><button class="btn navy" type="submit" disabled>{e(label)}</button>
+<p class="hint" id="campus-privacy">{e(w["privacy"])}</p>
+<noscript><p><a href="{wa_link()}">{e(UI[lang]["ask"])}</a></p></noscript></form></section>'''
+
 SERVICE_STATUS = {
     "en": "Not yet open. This service has been built and tested in a test environment; it opens only when the school approves the launch. Until then, ask on WhatsApp.",
     "sw": "Bado haijafunguliwa. Huduma hii imejengwa na kujaribiwa kwenye mazingira ya majaribio; itafunguliwa tu shule itakapoidhinisha uzinduzi. Hadi wakati huo, uliza kwa WhatsApp.",
@@ -311,7 +340,8 @@ def service_page(lang, page):
     title, intro, html_body = SERVICE_TEXT[lang][page]
     status = (f'<div class="note gold"><strong>{e(UI[lang]["not_open"])}.</strong> {e(SERVICE_STATUS[lang].split(". ", 1)[1])}'
               f' <a href="{wa_link()}">{e(UI[lang]["ask"])}</a></div>')
-    return title, intro, status + html_body + f'<p><a class="btn navy" href="{wa_link()}">{e(UI[lang]["ask"])}</a></p>'
+    entry = campus_entry(lang, page) if page in ("portal", "library") else ""
+    return title, intro, status + entry + html_body + f'<p><a class="btn navy" href="{wa_link()}">{e(UI[lang]["ask"])}</a></p>'
 
 
 # ------------------------------------------------------------
@@ -759,6 +789,7 @@ def page_html(lang, page):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
 <title>{e(full_title)}</title>
 <meta name="description" content="{e(description)}">
 {share}
@@ -784,6 +815,7 @@ def page_html(lang, page):
 <div><h3>{e(ui["foot_contact"])}</h3><ul><li>{e(ui["wa"])}: <a href="{wa_link()}">{WHATSAPP_DISPLAY}</a></li><li>{DOMAIN}</li></ul></div>
 </div><div class="copy">© 2026 {e(ui["copy"])}</div></div></footer>
 <a class="wa-float" href="{wa_link()}" aria-label="WhatsApp {WHATSAPP_DISPLAY}">WhatsApp</a>
+<script src="{assets}js/campus-link.js"></script>
 <script src="{assets}js/site.js"></script>
 </body>
 </html>

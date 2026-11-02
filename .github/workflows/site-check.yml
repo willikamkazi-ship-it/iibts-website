@@ -25,6 +25,7 @@ jobs:
         run: |
           python3 tools/check_static.py
           node tools/check_registration.cjs
+          node tools/check_campus_link.cjs
       - name: Install Chromium for the browser tests
         run: |
           npm install --no-save playwright@1.56.1

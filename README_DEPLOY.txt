@@ -10,6 +10,7 @@ Tests (also run by .github/workflows/site-check.yml):
     python3 tools/build_site.py --check
     python3 tools/check_static.py
     node tools/check_registration.cjs
+    node tools/check_campus_link.cjs
     NODE_PATH=$(npm root -g) node tools/check_site.cjs [screenshot_dir]
 
 PREVIEW = True in tools/build_site.py shows a "not yet published" banner,
