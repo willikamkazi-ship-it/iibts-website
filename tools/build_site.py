@@ -21,12 +21,17 @@ import json
 import os
 import re
 import sys
+from urllib.parse import urlsplit
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREVIEW = True
 WHATSAPP = "255704686885"
 WHATSAPP_DISPLAY = "+255 704 686 885"
 DOMAIN = "obts.co.tz"
+# The school system's public address (odm-ai-asistant), e.g. "https://<service>.onrender.com". Empty until the
+# library routes (/library, served by portal_routes.py) are deployed on PRODUCTION and checked there: while empty,
+# no page links to the system and the library says "not yet open". The staging address must never be put here.
+SERVICE_BASE = ""
 PAGES = ("index", "about", "courses", "how-to-learn", "admissions", "contact", "faq", "privacy", "terms",
          "library", "bookstore", "portal", "assistant", "syllabus")
 NAV = ("index", "about", "courses", "admissions", "library", "portal", "contact", "faq")  # how-to-learn: home and footer
@@ -197,11 +202,14 @@ CAMPUS_TEXT = {
 
 
 def campus_entry(lang, page):
+    origin = service_origin()
+    if not origin:
+        return ""
     w = CAMPUS_TEXT[lang]
     target = "/library" if page == "library" else "/dashboard"
     label = w["library"] if page == "library" else w["button"]
     return f'''<section class="note"><h2>{e(w["title"])}</h2><p>{e(w["help"])}</p>
-<form id="campus-entry" data-origin="{CAMPUS_ORIGIN}" data-target="{target}" data-language="{lang}" data-error="{e(w["error"])}" novalidate>
+<form id="campus-entry" data-origin="{origin}" data-target="{target}" data-language="{lang}" data-error="{e(w["error"])}" novalidate>
 <div class="field"><label for="campus-link">{e(w["label"])}</label><input type="url" id="campus-link" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="campus-privacy" required></div>
 <p class="error" role="alert"></p><button class="btn navy" type="submit" disabled>{e(label)}</button>
 <p class="hint" id="campus-privacy">{e(w["privacy"])}</p>
@@ -328,16 +336,44 @@ SERVICE_TEXT = {
 }
 
 
+OPEN_LIBRARY = {"en": "Open the library", "sw": "Fungua maktaba", "fr": "Ouvrir la bibliothèque"}
+
+
+def service_origin():
+    """Fail closed unless the enabled address is the exact known HTTPS production origin."""
+    if not SERVICE_BASE:
+        return ""
+    url = urlsplit(SERVICE_BASE)
+    if (url.scheme != "https" or url.netloc != urlsplit(CAMPUS_ORIGIN).netloc
+            or url.username or url.password or url.path not in ("", "/") or url.query or url.fragment):
+        raise ValueError("SERVICE_BASE must be the verified production origin; staging and other origins are refused")
+    return CAMPUS_ORIGIN
+
+
+def library_url(lang):
+    """The system's own library page in the same language (portal_routes.library_page reads ?lang=en|sw|fr)."""
+    origin = service_origin()
+    return f"{origin}/library?lang={lang}" if origin else ""
+
+
+def is_open(page):
+    return page == "library" and bool(service_origin())
+
+
 def services_grid(lang):
     ui, text = UI[lang], SERVICE_TEXT[lang]
     cards = "".join(f'<article class="card"><h3><a href="{p}.html">{e(ui["nav"][p])}</a></h3>'
-                    f'<p><span class="tag wait">{e(ui["not_open"])}</span></p><p>{e(text["cards"][p])}</p></article>'
+                    + ("" if is_open(p) else f'<p><span class="tag wait">{e(ui["not_open"])}</span></p>')
+                    + f'<p>{e(text["cards"][p])}</p></article>'
                     for p in SERVICES)
     return f'<section class="section"><h2>{e(text["heading"])}</h2><div class="grid">{cards}</div></section>'
 
 
 def service_page(lang, page):
     title, intro, html_body = SERVICE_TEXT[lang][page]
+    if is_open(page):
+        return title, intro, (f'<p><a class="btn navy" href="{e(library_url(lang))}">{e(OPEN_LIBRARY[lang])}</a></p>'
+                              + campus_entry(lang, page) + html_body + f'<p><a class="btn navy" href="{wa_link()}">{e(UI[lang]["ask"])}</a></p>')
     status = (f'<div class="note gold"><strong>{e(UI[lang]["not_open"])}.</strong> {e(SERVICE_STATUS[lang].split(". ", 1)[1])}'
               f' <a href="{wa_link()}">{e(UI[lang]["ask"])}</a></div>')
     entry = campus_entry(lang, page) if page in ("portal", "library") else ""

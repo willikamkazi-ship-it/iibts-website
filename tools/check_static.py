@@ -20,6 +20,30 @@ class Page(HTMLParser):
         self.tags.append((tag, dict(attrs)))
 
 
+assert 'staging' not in builder.SERVICE_BASE.lower(), 'SERVICE_BASE must be the production address, never staging'
+for lang in builder.LANGS:  # with an address, the library opens in the same language
+    builder_base, builder.SERVICE_BASE = builder.SERVICE_BASE, builder.CAMPUS_ORIGIN
+    try:
+        assert f'{builder.CAMPUS_ORIGIN}/library?lang={lang}' in builder.service_page(lang, 'library')[2]
+        assert f'data-language="{lang}"' in builder.campus_entry(lang, 'portal')
+        assert builder.UI[lang]['not_open'] in builder.service_page(lang, 'portal')[2]  # the dashboard stays closed
+    finally:
+        builder.SERVICE_BASE = builder_base
+
+for refused in ('http://odm-ai-asistant.onrender.com', 'https://odm-ai-asistant-staging.onrender.com',
+                builder.CAMPUS_ORIGIN + '.example.com', builder.CAMPUS_ORIGIN + '/dashboard',
+                builder.CAMPUS_ORIGIN + '?t=private', 'https://user:password@odm-ai-asistant.onrender.com'):
+    builder_base, builder.SERVICE_BASE = builder.SERVICE_BASE, refused
+    try:
+        try:
+            builder.service_origin()
+        except ValueError:
+            pass
+        else:
+            raise AssertionError('unsafe service address accepted')
+    finally:
+        builder.SERVICE_BASE = builder_base
+
 checks = 0
 for lang, folder in builder.LANGS.items():
     for name in builder.PAGES:
@@ -40,6 +64,10 @@ for lang, folder in builder.LANGS.items():
                 continue
             target = (file.parent / unquote(urlsplit(value).path)).resolve()
             assert target.is_relative_to(ROOT) and target.exists(), f'{file}: missing {value}'
+        # the school system is linked only once SERVICE_BASE names the checked production address
+        if not builder.SERVICE_BASE:
+            assert '/library?lang=' not in text, f'{file}: links to the school system while SERVICE_BASE is empty'
+            assert 'id="campus-entry"' not in text, f'{file}: campus entry enabled before production verification'
         if name == 'admissions':
             assert 'id="registration-continue"' in text and '<noscript>' in text
         checks += 1
