@@ -26,9 +26,19 @@ for lang in builder.LANGS:  # with an address, the library opens in the same lan
     try:
         assert f'{builder.CAMPUS_ORIGIN}/library?lang={lang}' in builder.service_page(lang, 'library')[2]
         assert f'data-language="{lang}"' in builder.campus_entry(lang, 'portal')
-        assert builder.UI[lang]['not_open'] in builder.service_page(lang, 'portal')[2]  # the dashboard stays closed
+        assert 'text=DASHBOARD' in builder.service_page(lang, 'portal')[2]
+        assert 'text=MAKTABA' in builder.service_page(lang, 'library')[2]
+        assert builder.UI[lang]['not_open'] not in builder.service_page(lang, 'portal')[2]
+        assert not builder.is_open('bookstore') and not builder.is_open('assistant')
     finally:
         builder.SERVICE_BASE = builder_base
+
+builder_base, builder.SERVICE_BASE = builder.SERVICE_BASE, ''
+try:
+    assert not builder.is_open('portal') and not builder.is_open('library')
+    assert not builder.campus_entry('sw', 'portal')
+finally:
+    builder.SERVICE_BASE = builder_base
 
 for refused in ('http://odm-ai-asistant.onrender.com', 'https://odm-ai-asistant-staging.onrender.com',
                 builder.CAMPUS_ORIGIN + '.example.com', builder.CAMPUS_ORIGIN + '/dashboard',

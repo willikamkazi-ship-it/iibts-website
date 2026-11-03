@@ -21,7 +21,7 @@ import json
 import os
 import re
 import sys
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlencode
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREVIEW = True
@@ -31,7 +31,7 @@ DOMAIN = "obts.co.tz"
 # The school system's public address (odm-ai-asistant), e.g. "https://<service>.onrender.com". Empty until the
 # library routes (/library, served by portal_routes.py) are deployed on PRODUCTION and checked there: while empty,
 # no page links to the system and the library says "not yet open". The staging address must never be put here.
-SERVICE_BASE = ""
+SERVICE_BASE = "https://odm-ai-asistant.onrender.com"
 PAGES = ("index", "about", "courses", "how-to-learn", "admissions", "contact", "faq", "privacy", "terms",
          "library", "bookstore", "portal", "assistant", "syllabus")
 NAV = ("index", "about", "courses", "admissions", "library", "portal", "contact", "faq")  # how-to-learn: home and footer
@@ -158,8 +158,8 @@ UI = {
 }
 
 
-def wa_link():
-    return f"https://wa.me/{WHATSAPP}"
+def wa_link(command=""):
+    return f"https://wa.me/{WHATSAPP}" + ("?" + urlencode({"text": command}) if command else "")
 
 
 def course_cards(lang, link_prefix=""):
@@ -176,9 +176,8 @@ def course_cards(lang, link_prefix=""):
 
 # ------------------------------------------------------------
 # Online services: library, bookstore, student dashboard, AI assistant.
-# They are built and tested in the school system's test environment
-# (odm-ai-asistant) but NOT yet open: every page says so plainly, and
-# its only working button is WhatsApp.
+# The library and student portal are verified on production. Bookstore
+# and paid AI services remain closed. Lesson publication is separate.
 # ------------------------------------------------------------
 
 SERVICES = ("library", "bookstore", "portal", "assistant")
@@ -200,6 +199,18 @@ CAMPUS_TEXT = {
            "privacy": "Le lien est vérifié sur cet appareil et n'est pas enregistré par ce site. Gardez-le privé."},
 }
 
+CAMPUS_REQUEST = {
+    'sw': ('Pata kiungo chako binafsi', 'Omba kiungo cha dashboard', 'Omba kiungo cha maktaba',
+           'Bofya kitufe kisha tuma ujumbe uliowekwa kwenye WhatsApp ya shule. Tumia namba uliyojisajilia. Mfumo utakutumia kiungo binafsi kinachodumu saa 24.',
+           'Dashboard inapatikana. Nyenzo za masomo huonekana baada ya kutolewa na shule.'),
+    'en': ('Get your personal link', 'Request my dashboard link', 'Request my library link',
+           'Select the button and send the prepared message to OBTS WhatsApp from your registered number. The system replies with a private link valid for 24 hours.',
+           'The dashboard is available. Lesson materials appear after the school releases them.'),
+    'fr': ('Recevoir votre lien personnel', 'Demander mon lien du tableau de bord', 'Demander mon lien de bibliothèque',
+           'Sélectionnez le bouton et envoyez le message préparé sur WhatsApp OBTS depuis votre numéro inscrit. Le système répond avec un lien personnel valable 24 heures.',
+           'Le tableau de bord est disponible. Les documents apparaissent après leur publication par l’école.'),
+}
+
 
 def campus_entry(lang, page):
     origin = service_origin()
@@ -208,12 +219,17 @@ def campus_entry(lang, page):
     w = CAMPUS_TEXT[lang]
     target = "/library" if page == "library" else "/dashboard"
     label = w["library"] if page == "library" else w["button"]
-    return f'''<section class="note"><h2>{e(w["title"])}</h2><p>{e(w["help"])}</p>
+    request = CAMPUS_REQUEST[lang]
+    command = "MAKTABA" if page == "library" else "DASHBOARD"
+    request_label = request[2] if page == "library" else request[1]
+    return f'''<section class="note"><h2>{e(request[0])}</h2><p>{e(request[3])}</p>
+<p><a class="btn navy" href="{e(wa_link(command))}">{e(request_label)}</a></p>
+<details><summary>{e(w["title"])}</summary><p>{e(w["help"])}</p>
 <form id="campus-entry" data-origin="{origin}" data-target="{target}" data-language="{lang}" data-error="{e(w["error"])}" novalidate>
 <div class="field"><label for="campus-link">{e(w["label"])}</label><input type="url" id="campus-link" autocomplete="off" autocapitalize="off" spellcheck="false" aria-describedby="campus-privacy" required></div>
 <p class="error" role="alert"></p><button class="btn navy" type="submit" disabled>{e(label)}</button>
 <p class="hint" id="campus-privacy">{e(w["privacy"])}</p>
-<noscript><p><a href="{wa_link()}">{e(UI[lang]["ask"])}</a></p></noscript></form></section>'''
+<noscript><p><a href="{e(wa_link(command))}">{e(request_label)}</a></p></noscript></form></details></section>'''
 
 SERVICE_STATUS = {
     "en": "Not yet open. This service has been built and tested in a test environment; it opens only when the school approves the launch. Until then, ask on WhatsApp.",
@@ -357,7 +373,7 @@ def library_url(lang):
 
 
 def is_open(page):
-    return page == "library" and bool(service_origin())
+    return page in ("library", "portal") and bool(service_origin())
 
 
 def services_grid(lang):
@@ -372,7 +388,9 @@ def services_grid(lang):
 def service_page(lang, page):
     title, intro, html_body = SERVICE_TEXT[lang][page]
     if is_open(page):
-        return title, intro, (f'<p><a class="btn navy" href="{e(library_url(lang))}">{e(OPEN_LIBRARY[lang])}</a></p>'
+        browse = (f'<p><a class="btn navy" href="{e(library_url(lang))}">{e(OPEN_LIBRARY[lang])}</a></p>'
+                  if page == 'library' else '')
+        return title, intro, (f'<p class="note">{e(CAMPUS_REQUEST[lang][4])}</p>' + browse
                               + campus_entry(lang, page) + html_body + f'<p><a class="btn navy" href="{wa_link()}">{e(UI[lang]["ask"])}</a></p>')
     status = (f'<div class="note gold"><strong>{e(UI[lang]["not_open"])}.</strong> {e(SERVICE_STATUS[lang].split(". ", 1)[1])}'
               f' <a href="{wa_link()}">{e(UI[lang]["ask"])}</a></div>')

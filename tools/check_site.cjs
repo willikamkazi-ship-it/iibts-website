@@ -132,14 +132,22 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
   }
   // The old library.html is now the real library page (old links keep working).
   ok(/<h1>Library<\/h1>/.test(fs.readFileSync(path.join(root, 'library.html'), 'utf8')), 'library', 'old library link opens the library page');
-  // Online services that are not open say so, and offer only WhatsApp as an action.
+  // Library/campus use the verified production routes; closed services say so.
   const notOpen = { en: 'Not yet open', sw: 'Bado haijafunguliwa', fr: 'Pas encore ouvert' };
   for (const [lang, folder] of Object.entries(langs)) {
     for (const name of ['library', 'bookstore', 'portal', 'assistant']) {
       const html = fs.readFileSync(path.join(root, folder, name + '.html'), 'utf8');
-      ok(html.includes(notOpen[lang]), `${lang}/${name}`, 'service shows that it is not yet open');
       const buttons = [...html.matchAll(/class="btn[^"]*" href="([^"]+)"/g)].map((m) => m[1]);
-      ok(buttons.length > 0 && buttons.every((href) => href === WA), `${lang}/${name}`, 'only WhatsApp buttons: ' + buttons.join(' '));
+      const campusOpen = ['library', 'portal'].includes(name) && html.includes('id="campus-entry"');
+      if (campusOpen) {
+        const command = name === 'library' ? 'MAKTABA' : 'DASHBOARD';
+        ok(!html.includes(notOpen[lang]) && html.includes(`text=${command}`), `${lang}/${name}`, 'personal link requested through the school WhatsApp');
+        const allowed = [WA, WA + '?text=' + command, 'https://odm-ai-asistant.onrender.com/library?lang=' + lang];
+        ok(buttons.length > 0 && buttons.every((href) => allowed.includes(href)), `${lang}/${name}`, 'only verified service/WhatsApp buttons');
+      } else {
+        ok(html.includes(notOpen[lang]), `${lang}/${name}`, 'service shows that it is not yet open');
+        ok(buttons.length > 0 && buttons.every((href) => href === WA), `${lang}/${name}`, 'only WhatsApp buttons: ' + buttons.join(' '));
+      }
     }
     const home = fs.readFileSync(path.join(root, folder, 'index.html'), 'utf8');
     ok(['library', 'bookstore', 'portal', 'assistant'].every((p) => home.includes(`href="${p}.html"`)), `${lang}/index`, 'home links every online service');
