@@ -24,7 +24,7 @@ import sys
 from urllib.parse import urlsplit, urlencode
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PREVIEW = True
+PREVIEW = False
 WHATSAPP = "255704686885"
 WHATSAPP_DISPLAY = "+255 704 686 885"
 DOMAIN = "obts.co.tz"
