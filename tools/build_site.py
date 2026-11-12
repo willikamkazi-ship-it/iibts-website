@@ -23,6 +23,8 @@ import re
 import sys
 from urllib.parse import urlsplit, urlencode
 
+from institutional_pages import LIBRARY_LINKS, PAGES as INSTITUTIONAL_PAGES
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREVIEW = False
 WHATSAPP = "255704686885"
@@ -33,12 +35,12 @@ DOMAIN = "obts.co.tz"
 # no page links to the system and the library says "not yet open". The staging address must never be put here.
 SERVICE_BASE = "https://odm-ai-asistant.onrender.com"
 PAGES = ("index", "about", "courses", "how-to-learn", "admissions", "contact", "faq", "privacy", "terms",
-         "library", "bookstore", "portal", "assistant", "syllabus", "learn", "join-obts")
-NAV = ("index", "about", "courses", "learn", "join-obts", "portal", "contact")
+         "library", "bookstore", "portal", "assistant", "syllabus", "learn", "join-obts", *INSTITUTIONAL_PAGES["en"])
+NAV = ("index", "about", "courses", "learn", "library", "research", "join-obts", "portal", "contact")
 NAV_LABELS = {
-    "en": ("Home", "About the school", "Courses", "Learn", "Join", "My classroom", "Contact"),
-    "sw": ("Mwanzo", "Kuhusu shule", "Kozi", "Jifunze", "Jiunge", "Darasa langu", "Mawasiliano"),
-    "fr": ("Accueil", "À propos de l’école", "Cours", "Étudier", "S’inscrire", "Ma classe", "Contact"),
+    "en": ("Home", "About the school", "Courses", "Learn", "Library", "Research", "Join", "My classroom", "Contact"),
+    "sw": ("Mwanzo", "Kuhusu shule", "Kozi", "Jifunze", "Maktaba", "Utafiti", "Jiunge", "Darasa langu", "Mawasiliano"),
+    "fr": ("Accueil", "À propos de l’école", "Cours", "Étudier", "Bibliothèque", "Recherche", "S’inscrire", "Ma classe", "Contact"),
 }
 LANGS = {"en": "", "sw": "sw/", "fr": "fr/"}
 LANG_LABEL = {"en": "EN", "sw": "SW", "fr": "FR"}
@@ -405,17 +407,56 @@ def is_open(page):
     return page in ("library", "portal") and bool(service_origin())
 
 
+def page_label(lang, page):
+    if page in INSTITUTIONAL_PAGES[lang]:
+        return INSTITUTIONAL_PAGES[lang][page][0]
+    if page == "learn":
+        return SAMPLE_LESSON_UI[lang][0]
+    if page == "join-obts":
+        return SAMPLE_LESSON_UI[lang][2]
+    return UI[lang]["nav"][page]
+
+
+def institutional_page(lang, page):
+    title, intro, entries = INSTITUTIONAL_PAGES[lang][page]
+    cards = []
+    for heading, description, *targets in entries:
+        links = " · ".join(f'<a href="{target}.html">{e(page_label(lang, target))}</a>' for target in targets)
+        cards.append(f'<article class="card"><h2>{e(heading)}</h2><p>{e(description)}</p><p>{links}</p></article>')
+    return title, intro, f'<div class="grid institutional-grid">{"".join(cards)}</div>'
+
+
+def library_sections(lang):
+    choose, heading, categories, availability = LIBRARY_LINKS[lang]
+    languages = " · ".join(
+        f'<a lang="{code}" href="../{folder}library.html">{e(LANG_NAME[code])}</a>' if LANGS[lang]
+        else f'<a lang="{code}" href="{folder}library.html">{e(LANG_NAME[code])}</a>'
+        for code, folder in LANGS.items()
+    )
+    destinations = (None, "learn", "research", None, None, "bookstore")
+    entries = []
+    for category, target in zip(categories, destinations, strict=True):
+        label = e(category)
+        entries.append(f'<li><a href="{target}.html">{label}</a></li>' if target else f'<li>{label}</li>')
+    return (f'<h2>{e(choose)}</h2><p>{languages}</p>'
+            f'<h2>{e(heading)}</h2><ul>{"".join(entries)}</ul><p>{e(availability)}</p>')
+
+
 def services_grid(lang):
     ui, text = UI[lang], SERVICE_TEXT[lang]
     cards = "".join(f'<article class="card"><h3><a href="{p}.html">{e(ui["nav"][p])}</a></h3>'
                     + ("" if is_open(p) else f'<p><span class="tag wait">{e(ui["not_open"])}</span></p>')
                     + f'<p>{e(text["cards"][p])}</p></article>'
                     for p in SERVICES)
+    title, intro, _ = INSTITUTIONAL_PAGES[lang]["research"]
+    cards += f'<article class="card"><h3><a href="research.html">{e(title)}</a></h3><p>{e(intro)}</p></article>'
     return f'<section class="section"><h2>{e(text["heading"])}</h2><div class="grid">{cards}</div></section>'
 
 
 def service_page(lang, page):
     title, intro, html_body = SERVICE_TEXT[lang][page]
+    if page == "library":
+        html_body = library_sections(lang) + html_body
     if is_open(page):
         browse = (f'<p><a class="btn navy" href="{e(library_url(lang))}">{e(OPEN_LIBRARY[lang])}</a></p>'
                   if page == 'library' else '')
@@ -650,6 +691,8 @@ def body(lang, page):
         }
     if page in SERVICES:
         content[page] = service_page(lang, page)
+    if page in INSTITUTIONAL_PAGES[lang]:
+        content[page] = institutional_page(lang, page)
     if page == "syllabus":
         content[page] = (SYLLABUS_TEXT[lang]["title"], SYLLABUS_TEXT[lang]["intro"], None)
     if page == "courses":
@@ -913,11 +956,10 @@ def page_html(lang, page):
         f'{CURRENT_LANG if code == lang else ""}>{LANG_LABEL[code]}</a>' for code in LANGS)
     alternates = "".join(f'<link rel="alternate" hreflang="{code}" href="https://{DOMAIN}/{LANGS[code]}{"" if page == "index" else page + ".html"}">'
                          for code in LANGS)
-    footer_links = "".join(f'<li><a href="{p}.html">{e(ui["nav"][p])}</a></li>' for p in ("courses", "syllabus", "how-to-learn",
-                                                                                            "admissions", "library",
-                                                                                            "bookstore", "portal",
-                                                                                            "assistant", "faq",
-                                                                                            "privacy", "terms"))
+    footer_pages = ("courses", "syllabus", "how-to-learn", "admissions", "campus", "library",
+                    "research", "bookstore", "portal", "assistant", "news", "standards",
+                    "scholarships", "support", "faq", "policies", "privacy", "terms")
+    footer_links = "".join(f'<li><a href="{p}.html">{e(page_label(lang, p))}</a></li>' for p in footer_pages)
     full_title = title if is_home else f"{title} | OBTS"
     preview = f'<div class="preview">{e(ui["preview"])}</div>' if PREVIEW else ""
     # the page's own lead sentence describes it in search results and link previews; the home page uses the school's
@@ -974,9 +1016,8 @@ def page_html(lang, page):
 '''
 
 
-# Pages of the earlier IIBTS site: each now points to the OBTS page that replaces it.
-REDIRECTS = {"programs": "courses", "policies": "privacy", "campus": "how-to-learn",
-             "news": "index", "scholarships": "admissions", "standards": "about", "support": "contact"}
+# The old Programs address leads to the current course catalogue.
+REDIRECTS = {"programs": "courses"}
 
 
 def redirect_html(target):

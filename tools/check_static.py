@@ -1,13 +1,10 @@
 """Validate generated pages, local links/assets and language metadata without a browser."""
 from html.parser import HTMLParser
 from pathlib import Path
-import importlib.util
+import build_site as builder
 from urllib.parse import urlsplit, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
-spec = importlib.util.spec_from_file_location('builder', ROOT / 'tools/build_site.py')
-builder = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(builder)
 
 
 class Page(HTMLParser):

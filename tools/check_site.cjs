@@ -14,11 +14,11 @@ const root = path.resolve(__dirname, '..');
 const shots = process.argv[2];
 const langs = { en: '', sw: 'sw/', fr: 'fr/' };
 const pages = ['index', 'about', 'courses', 'how-to-learn', 'admissions', 'contact', 'faq', 'privacy', 'terms',
-  'library', 'bookstore', 'portal', 'assistant', 'syllabus', 'learn', 'join-obts'];
+  'library', 'bookstore', 'portal', 'assistant', 'syllabus', 'learn', 'join-obts', 'research', 'campus', 'news', 'scholarships', 'standards', 'support', 'policies'];
 const viewports = { phone: { width: 360, height: 780 }, tablet: { width: 820, height: 1180 }, desktop: { width: 1366, height: 900 } };
 const WA = 'https://wa.me/255704686885';
 const currency = /TZS|Tsh\b|USD\b|shilingi/i;
-const forbidden = [/[\w.]+@[\w.]+\.\w+/, /partner|partenaire|ushirikiano/i, /scholarship|bourse|udhamini/i,
+const forbidden = [/[\w.]+@[\w.]+\.\w+/, /partner|partenaire|ushirikiano/i, /guaranteed scholarships|bourses garanties|ufadhili wa uhakika/i,
   /accredit|ithibati|accrédit/i, /IIBTS|International Institute/i, /lorem|ipsum|TODO|placeholder text/i,
   /RASIMU|INASUBIRI UKAGUZI|majibu\.pdf|mwongozo\.pdf|answer key\.pdf/];
 const failures = [];
@@ -121,6 +121,9 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
           ok(!menuVisible, where, 'menu button shown on desktop');
           ok(await page.isVisible('#site-nav a[href="courses.html"]'), where, 'navigation hidden on desktop');
         }
+        for (const section of ['library', 'research']) {
+          ok(await page.isVisible(`#site-nav a[href="${section}.html"]`), where, `${section} is available in the main menu`);
+        }
         // Language switch: each link opens the same page in that language.
         const switches = await page.$$eval('.lang a', (as) => as.map((a) => [a.getAttribute('hreflang'), a.getAttribute('href')]));
         ok(switches.length === 3, where, 'language switch');
@@ -159,7 +162,7 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
     await context.close();
   }
   // Pages of the earlier site now redirect to their OBTS replacement.
-  for (const old of ['programs', 'policies', 'campus', 'news', 'scholarships', 'standards', 'support']) {
+  for (const old of ['programs']) {
     const html = fs.readFileSync(path.join(root, old + '.html'), 'utf8');
     const target = (html.match(/url=([\w-]+\.html)/) || [])[1];
     ok(target && fs.existsSync(path.join(root, target)), old, 'redirect target');
