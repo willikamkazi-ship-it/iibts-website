@@ -167,13 +167,28 @@ def wa_link(command=""):
     return f"https://wa.me/{WHATSAPP}" + ("?" + urlencode({"text": command}) if command else "")
 
 
-def course_cards(lang, link_prefix=""):
+HERO_PHOTO_ALT = {
+    "en": "A learner studying with an open Bible, a notebook and a phone",
+    "sw": "Mwanafunzi akisoma Biblia akiwa na daftari na simu",
+    "fr": "Une étudiante lit la Bible avec un cahier et un téléphone",
+}
+
+
+def hero_photo(lang):
+    return (f'<img class="hero-photo" src="{{assets}}img/learning/home.webp" width="960" height="640" '
+            f'alt="{e(HERO_PHOTO_ALT[lang])}" fetchpriority="high">')
+
+
+def course_cards(lang, *, with_photos=False):
     ui = UI[lang]
     cards = []
     for course in COURSES:
         status = (f'<span class="tag">{e(ui["open"])}</span><span class="tag wait">{e(ui["tba"])}</span>' if course["open"]
                   else f'<span class="tag wait">{e(ui["soon"])}</span>')
-        cards.append(f'<article class="card{"" if course["open"] else " gold"}" id="{course["code"].lower()}">'
+        code = course["code"].lower()
+        photo = (f'<img class="course-photo" src="{{assets}}img/learning/{code}.webp" width="480" height="320" '
+                 'alt="" loading="lazy" decoding="async">' if with_photos else '')
+        cards.append(f'<article class="card{"" if course["open"] else " gold"}" id="{code}">{photo}'
                      f'<h3>{e(course["name"][lang])}</h3><p>{status}<span class="tag">{course["modules"]} {e(ui["modules"])}'
                      f'</span></p><p>{e(course["text"][lang])}</p></article>')
     return '<div class="grid">' + "".join(cards) + "</div>"
@@ -472,7 +487,7 @@ def body(lang, page):
 <h1>Study the Bible, theology and ministry skills from your phone</h1>
 <p class="lead">OBTS is an online school. Lessons come to you as PDF files on WhatsApp, each with clear objectives, a timed study plan, exercises and a task your tutor reviews.</p>
 <div class="actions"><a class="btn" href="admissions.html">Register your interest</a><a class="btn secondary" href="courses.html">See the courses</a></div></div>
-<img class="seal" src="{{assets}}img/obts-seal-192.png" width="192" height="192" alt="OBTS seal"></div></section>
+{hero_photo(lang)}</div></section>
 <div class="wrap"><section class="section"><h2>What you can study</h2>{course_cards(lang)}</section>
 <section class="section"><h2>How a lesson works</h2><ol class="steps">
 <li>You receive the lesson as a PDF on WhatsApp.</li><li>You follow the study plan: reading, Scripture or examples, and exercises.</li>
@@ -488,7 +503,7 @@ def body(lang, page):
 <div class="card"><h3>Three languages</h3><p>The website is in English, Kiswahili and French. The first 25 lessons of General Bible Studies &amp; Theology (modules 1–3) have been written in all three languages and are being reviewed by lecturers; once approved, you receive them in the language you choose when you register. The other courses are written first in English (the AI course in Kiswahili); their Kiswahili and French versions are being prepared and reviewed.</p></div></div>
 <h2>Courses</h2><p>OBTS offers six courses, and a seventh on practical AI is being prepared. See <a href="courses.html">Courses</a>.</p>'''),
             "courses": ("Courses", "Seven courses, each divided into modules and taught lesson by lesson.",
-                        f'''{course_cards(lang)}
+                        f'''{course_cards(lang, with_photos=True)}
 <div class="note"><strong>Language of the lessons.</strong> General Bible Studies &amp; Theology (GB): lessons 1–25 (modules 1–3) have been written in English, Kiswahili and French and are being reviewed by lecturers. A lesson is sent only after a lecturer has approved it in that language; the student then receives it in the language chosen at registration, as a PDF lesson and summary pages on WhatsApp. B66, PE, ES, CL and ENT are written first in English and the AI course in Kiswahili; their Kiswahili and French versions are being prepared and checked, so ask admissions which language is available. Pastoral English and English Speaking teach English, so their exercises stay in English.</div>
 <div class="note gold">Fees, start dates and the number of courses you may take at the same time will be announced by admissions. <a href="{wa}">Ask on WhatsApp</a>.</div>'''),
             "how-to-learn": ("How to learn with OBTS", "What you need, what a lesson contains and how you send your work.",
@@ -521,7 +536,7 @@ def body(lang, page):
 <h1>Jifunze Biblia, theolojia na ujuzi wa huduma kwa simu yako</h1>
 <p class="lead">OBTS ni shule ya mtandaoni. Masomo yanakufikia kama faili za PDF kwenye WhatsApp, kila moja likiwa na malengo yaliyo wazi, mpango wa kujifunza wenye dakika, mazoezi na kazi inayopitiwa na mkufunzi wako.</p>
 <div class="actions"><a class="btn" href="admissions.html">Onyesha nia ya kujiunga</a><a class="btn secondary" href="courses.html">Tazama kozi</a></div></div>
-<img class="seal" src="{{assets}}img/obts-seal-192.png" width="192" height="192" alt="Nembo ya OBTS"></div></section>
+{hero_photo(lang)}</div></section>
 <div class="wrap"><section class="section"><h2>Unachoweza kujifunza</h2>{course_cards(lang)}</section>
 <section class="section"><h2>Somo linavyofanya kazi</h2><ol class="steps">
 <li>Unapokea somo kama PDF kwenye WhatsApp.</li><li>Unafuata mpango wa kujifunza: kusoma, Maandiko au mifano, na mazoezi.</li>
@@ -537,7 +552,7 @@ def body(lang, page):
 <div class="card"><h3>Lugha tatu</h3><p>Tovuti iko kwa Kiingereza, Kiswahili na Kifaransa. Masomo 25 ya kwanza ya Mafunzo ya Jumla ya Biblia na Theolojia (moduli 1–3) yameandikwa kwa lugha zote tatu na yanakaguliwa na wahadhiri; yakishaidhinishwa, unayapokea kwa lugha utakayochagua wakati wa kujisajili. Kozi nyingine zinaandikwa kwanza kwa Kiingereza (kozi ya AI kwa Kiswahili); matoleo yake ya Kiswahili na Kifaransa yanaandaliwa na kukaguliwa.</p></div></div>
 <h2>Kozi</h2><p>OBTS inatoa kozi sita, na ya saba kuhusu matumizi ya AI inaandaliwa. Tazama <a href="courses.html">Kozi</a>.</p>'''),
             "courses": ("Kozi", "Kozi saba, kila moja imegawanywa katika moduli na kufundishwa somo kwa somo.",
-                        f'''{course_cards(lang)}
+                        f'''{course_cards(lang, with_photos=True)}
 <div class="note"><strong>Lugha ya masomo.</strong> Mafunzo ya Jumla ya Biblia na Theolojia (GB): masomo 1–25 (moduli 1–3) yameandikwa kwa Kiingereza, Kiswahili na Kifaransa na yanakaguliwa na wahadhiri. Somo linatumwa tu baada ya mhadhiri kuliidhinisha kwa lugha hiyo; kisha mwanafunzi analipokea kwa lugha aliyoichagua wakati wa kujisajili, kama somo la PDF pamoja na kurasa za muhtasari kwenye WhatsApp. B66, PE, ES, CL na ENT zinaandikwa kwanza kwa Kiingereza na kozi ya AI kwa Kiswahili; matoleo yake ya Kiswahili na Kifaransa yanaandaliwa na kukaguliwa, hivyo uliza ofisi ya usajili lugha inayopatikana. Kiingereza cha Kichungaji na Kuzungumza Kiingereza vinafundisha Kiingereza, hivyo mazoezi yake yanabaki kwa Kiingereza.</div>
 <div class="note gold">Ada, tarehe za kuanza na idadi ya kozi unazoweza kusoma kwa wakati mmoja zitatangazwa na ofisi ya usajili. <a href="{wa}">Uliza kwa WhatsApp</a>.</div>'''),
             "how-to-learn": ("Jinsi ya kujifunza na OBTS", "Unachohitaji, kilichomo kwenye somo na jinsi ya kutuma kazi yako.",
@@ -569,7 +584,7 @@ def body(lang, page):
 <h1>Étudiez la Bible, la théologie et le ministère depuis votre téléphone</h1>
 <p class="lead">OBTS est une école en ligne. Les leçons vous parviennent en PDF sur WhatsApp, chacune avec des objectifs clairs, un plan d'étude minuté, des exercices et une tâche que votre tuteur examine.</p>
 <div class="actions"><a class="btn" href="admissions.html">Manifester votre intérêt</a><a class="btn secondary" href="courses.html">Voir les cours</a></div></div>
-<img class="seal" src="{{assets}}img/obts-seal-192.png" width="192" height="192" alt="Sceau d'OBTS"></div></section>
+{hero_photo(lang)}</div></section>
 <div class="wrap"><section class="section"><h2>Ce que vous pouvez étudier</h2>{course_cards(lang)}</section>
 <section class="section"><h2>Comment se déroule une leçon</h2><ol class="steps">
 <li>Vous recevez la leçon en PDF sur WhatsApp.</li><li>Vous suivez le plan d'étude : lecture, Écriture ou exemples, et exercices.</li>
@@ -585,7 +600,7 @@ def body(lang, page):
 <div class="card"><h3>Trois langues</h3><p>Le site est en anglais, en kiswahili et en français. Les 25 premières leçons des Études bibliques générales et théologie (modules 1 à 3) ont été rédigées dans les trois langues et sont en cours de vérification par des enseignants ; une fois approuvées, vous les recevez dans la langue choisie lors de votre inscription. Les autres cours sont d'abord écrits en anglais (le cours d'IA en kiswahili) ; leurs versions en kiswahili et en français sont en préparation et en vérification.</p></div></div>
 <h2>Cours</h2><p>OBTS propose six cours, et un septième sur l'usage pratique de l'IA est en préparation. Voir <a href="courses.html">Cours</a>.</p>'''),
             "courses": ("Cours", "Sept cours, chacun divisé en modules et enseigné leçon par leçon.",
-                        f'''{course_cards(lang)}
+                        f'''{course_cards(lang, with_photos=True)}
 <div class="note"><strong>Langue des leçons.</strong> Études bibliques générales et théologie (GB) : les leçons 1 à 25 (modules 1 à 3) ont été rédigées en anglais, en kiswahili et en français et sont en cours de vérification par des enseignants. Une leçon n'est envoyée qu'après son approbation par un enseignant dans cette langue ; l'étudiant la reçoit alors dans la langue choisie lors de l'inscription, sous forme de leçon PDF et de pages de résumé sur WhatsApp. B66, PE, ES, CL et ENT sont d'abord écrits en anglais et le cours d'IA en kiswahili ; leurs versions en kiswahili et en français sont en préparation et en vérification : demandez au service des inscriptions quelle langue est disponible. L'anglais pastoral et l'anglais oral enseignent l'anglais : leurs exercices restent en anglais.</div>
 <div class="note gold">Les frais, les dates de début et le nombre de cours que vous pouvez suivre en même temps seront annoncés par le service des inscriptions. <a href="{wa}">Demandez sur WhatsApp</a>.</div>'''),
             "how-to-learn": ("Comment apprendre avec OBTS", "Ce dont vous avez besoin, le contenu d'une leçon et l'envoi de votre travail.",

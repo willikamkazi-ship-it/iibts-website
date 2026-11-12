@@ -75,6 +75,11 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
           if (href.startsWith('#')) { ok(await page.$(href) !== null, where, 'anchor ' + href); continue; }
           ok(fs.existsSync(path.resolve(path.dirname(file), href.split('#')[0])), where, 'broken link ' + href);
         }
+        for (const image of await page.locator('img[loading="lazy"]').all()) {
+          await image.scrollIntoViewIfNeeded();
+          await image.evaluate((element) => element.decode().catch(() => {}));
+        }
+        await page.evaluate(() => window.scrollTo(0, 0));
         const images = await page.$$eval('img', (imgs) => imgs.map((i) => ({ src: i.getAttribute('src'), ok: i.complete && i.naturalWidth > 0,
           ratio: i.getBoundingClientRect().width / Math.max(1, i.getBoundingClientRect().height), natural: i.naturalWidth / Math.max(1, i.naturalHeight),
           visible: i.getBoundingClientRect().width > 0 })));
