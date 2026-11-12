@@ -14,10 +14,10 @@ const root = path.resolve(__dirname, '..');
 const shots = process.argv[2];
 const langs = { en: '', sw: 'sw/', fr: 'fr/' };
 const pages = ['index', 'about', 'courses', 'how-to-learn', 'admissions', 'contact', 'faq', 'privacy', 'terms',
-  'library', 'bookstore', 'portal', 'assistant', 'syllabus'];
+  'library', 'bookstore', 'portal', 'assistant', 'syllabus', 'learn', 'join-obts'];
 const viewports = { phone: { width: 360, height: 780 }, tablet: { width: 820, height: 1180 }, desktop: { width: 1366, height: 900 } };
 const WA = 'https://wa.me/255704686885';
-const forbidden = [/TZS|Tsh\b|shilingi/i, /[\w.]+@[\w.]+\.\w+/, /partner|partenaire|ushirikiano/i, /scholarship|bourse|udhamini/i,
+const forbidden = [/TZS|Tsh\b|USD\b|shilingi/i, /[\w.]+@[\w.]+\.\w+/, /partner|partenaire|ushirikiano/i, /scholarship|bourse|udhamini/i,
   /accredit|ithibati|accrédit/i, /IIBTS|International Institute/i, /lorem|ipsum|TODO|placeholder text/i,
   /RASIMU|INASUBIRI UKAGUZI|majibu\.pdf|mwongozo\.pdf|answer key\.pdf/];
 const failures = [];
@@ -62,7 +62,15 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
         // Links and images.
         const links = await page.$$eval('a[href]', (as) => as.map((a) => a.getAttribute('href')));
         for (const href of links) {
-          if (href.startsWith('https://wa.me/')) { ok(href === WA, where, 'WhatsApp link ' + href); continue; }
+          if (href.startsWith('https://wa.me/')) {
+            const url = new URL(href);
+            const command = { portal: 'DASHBOARD', library: 'MAKTABA', 'join-obts': 'NAHITAJI KUJIUNGA' }[name];
+            ok(href === WA || (command && url.origin + url.pathname === WA &&
+              url.searchParams.size === 1 && url.searchParams.get('text') === command && !url.hash),
+              where, 'WhatsApp link ' + href);
+            continue;
+          }
+          if (name === 'library' && href === `https://odm-ai-asistant.onrender.com/library?lang=${lang}`) continue;
           if (/^(https?:|mailto:|tel:)/.test(href)) { fail(where, 'external link not allowed: ' + href); continue; }
           if (href.startsWith('#')) { ok(await page.$(href) !== null, where, 'anchor ' + href); continue; }
           ok(fs.existsSync(path.resolve(path.dirname(file), href.split('#')[0])), where, 'broken link ' + href);

@@ -33,8 +33,13 @@ DOMAIN = "obts.co.tz"
 # no page links to the system and the library says "not yet open". The staging address must never be put here.
 SERVICE_BASE = "https://odm-ai-asistant.onrender.com"
 PAGES = ("index", "about", "courses", "how-to-learn", "admissions", "contact", "faq", "privacy", "terms",
-         "library", "bookstore", "portal", "assistant", "syllabus")
-NAV = ("index", "about", "courses", "admissions", "library", "portal", "contact", "faq")  # how-to-learn: home and footer
+         "library", "bookstore", "portal", "assistant", "syllabus", "learn", "join-obts")
+NAV = ("index", "about", "courses", "learn", "join-obts", "portal", "contact")
+NAV_LABELS = {
+    "en": ("Home", "About the school", "Courses", "Learn", "Join", "My classroom", "Contact"),
+    "sw": ("Mwanzo", "Kuhusu shule", "Kozi", "Jifunze", "Jiunge", "Darasa langu", "Mawasiliano"),
+    "fr": ("Accueil", "À propos de l’école", "Cours", "Étudier", "S’inscrire", "Ma classe", "Contact"),
+}
 LANGS = {"en": "", "sw": "sw/", "fr": "fr/"}
 LANG_LABEL = {"en": "EN", "sw": "SW", "fr": "FR"}
 OG_LOCALE = {"en": "en_US", "sw": "sw_TZ", "fr": "fr_FR"}
@@ -402,7 +407,62 @@ def service_page(lang, page):
 # Page bodies
 # ------------------------------------------------------------
 
+LEARNING_PAGES = {
+    "en": {
+        "learn": ("Study Bible and Theology",
+            '''<section class="section"><div class="wrap"><h1>Study Bible and Theology</h1>
+<p>Online Bible &amp; Theology School (OBTS) offers Bible and theology lessons in Swahili, English and French. Lessons are free.</p>
+<p>Start with Foundations of Bible and Theology. Read a lesson, complete an exercise and receive feedback from your lecturer.</p>
+<p><a href="courses.html">Course catalogue</a> · <a href="portal.html">Enter your classroom</a></p>
+<article><h2>Read a sample lesson</h2><h3>How to read a Bible passage in context</h3><p>Read 2 Timothy 3:14–17. Identify whom Paul is writing to and read the verses preceding verse 16. Notice how Paul connects learning Scripture with being equipped for good works.</p>
+<p>Practice: In your own words, name two uses of Scripture in this passage. Give one example of how you will apply what you learned this week.</p></article>
+<p><a class="btn" href="join-obts.html">Join OBTS</a></p></div></section>'''),
+        "join-obts": ("Complete enrollment",
+            '''<section class="section"><div class="wrap"><h1>Complete enrollment</h1>
+<p>Online Bible &amp; Theology School (OBTS) offers Bible and theology lessons in Swahili, English and French. Lessons are free.</p>
+<p>Start your enrollment on WhatsApp. There you’ll find the applicable costs and payment instructions.</p>
+<p><a class="btn" href="{enrollment_link}">Continue on WhatsApp</a></p>
+<p><a href="learn.html">Read a sample lesson</a></p></div></section>'''),
+    },
+    "sw": {
+        "learn": ("Jifunze Biblia na Theolojia",
+            '''<section class="section"><div class="wrap"><h1>Jifunze Biblia na Theolojia</h1>
+<p>Online Bible &amp; Theology School (OBTS) hutoa masomo ya Biblia na theolojia kwa Kiswahili, Kiingereza na Kifaransa. Masomo ni bure.</p>
+<p>Anza na Misingi ya Biblia na Theolojia. Utasoma somo, utafanya zoezi na utapata mrejesho wa mhadhiri.</p>
+<p><a href="courses.html">Orodha ya kozi</a> · <a href="portal.html">Ingia darasani</a></p>
+<article><h2>Soma somo la mfano</h2><h3>Jinsi ya kusoma kifungu cha Biblia kwa muktadha</h3><p>Soma 2 Timotheo 3:14–17. Tambua Paulo anamwandikia nani, kisha soma mistari inayotangulia mstari wa 16. Angalia jinsi Paulo anavyounganisha kujifunza Maandiko na kujiandaa kwa matendo mema.</p>
+<p>Zoezi la kujipima: Kwa maneno yako mwenyewe, taja matumizi mawili ya Maandiko katika kifungu hiki. Toa mfano mmoja wa jinsi utakavyotumia ulichojifunza wiki hii.</p></article>
+<p><a class="btn" href="join-obts.html">Jiunge na OBTS</a></p></div></section>'''),
+        "join-obts": ("Kamilisha usajili",
+            '''<section class="section"><div class="wrap"><h1>Kamilisha usajili</h1>
+<p>Online Bible &amp; Theology School (OBTS) hutoa masomo ya Biblia na theolojia kwa Kiswahili, Kiingereza na Kifaransa. Masomo ni bure.</p>
+<p>Anza usajili kwenye WhatsApp. Huko utapata taarifa za gharama zinazokuhusu na maelekezo ya malipo.</p>
+<p><a class="btn" href="{enrollment_link}">Endelea kwenye WhatsApp</a></p>
+<p><a href="learn.html">Soma somo la mfano</a></p></div></section>'''),
+    },
+    "fr": {
+        "learn": ("Étudier la Bible et la théologie",
+            '''<section class="section"><div class="wrap"><h1>Étudier la Bible et la théologie</h1>
+<p>Online Bible &amp; Theology School (OBTS) propose des cours de Bible et de théologie en kiswahili, en anglais et en français. Les cours sont gratuits.</p>
+<p>Commencez par les Fondements de la Bible et de la théologie. Lisez la leçon, faites l’exercice et recevez les commentaires de votre enseignant.</p>
+<p><a href="courses.html">Catalogue des cours</a> · <a href="portal.html">Entrer en classe</a></p>
+<article><h2>Lire une leçon d’exemple</h2><h3>Lire un passage biblique dans son contexte</h3><p>Lisez 2 Timothée 3:14–17. Identifiez le destinataire de Paul et lisez les versets qui précèdent le verset 16. Observez le lien entre l’apprentissage des Écritures et la préparation aux bonnes œuvres.</p>
+<p>Exercice : avec vos propres mots, relevez deux usages des Écritures dans ce passage. Donnez un exemple d’application pour cette semaine.</p></article>
+<p><a class="btn" href="join-obts.html">Rejoindre OBTS</a></p></div></section>'''),
+        "join-obts": ("Finaliser l’inscription",
+            '''<section class="section"><div class="wrap"><h1>Finaliser l’inscription</h1>
+<p>Online Bible &amp; Theology School (OBTS) propose des cours de Bible et de théologie en kiswahili, en anglais et en français. Les cours sont gratuits.</p>
+<p>Commencez votre inscription sur WhatsApp. Vous y trouverez les tarifs applicables et les modalités de paiement.</p>
+<p><a class="btn" href="{enrollment_link}">Continuer sur WhatsApp</a></p>
+<p><a href="learn.html">Lire une leçon d’exemple</a></p></div></section>'''),
+    },
+}
+
+
 def body(lang, page):
+    if page in LEARNING_PAGES[lang]:
+        title, content = LEARNING_PAGES[lang][page]
+        return title, content.replace("{enrollment_link}", wa_link("NAHITAJI KUJIUNGA")), False
     ui = UI[lang]
     wa = wa_link()
     if lang == "en":
@@ -809,7 +869,7 @@ def page_html(lang, page):
     title, main, is_home = body(lang, page)
     prefix = "../" if LANGS[lang] else ""
     assets = prefix + "assets/"
-    nav = "".join(f'<a href="{p}.html"{CURRENT_PAGE if p == page else ""}>{e(ui["nav"][p])}</a>' for p in NAV)
+    nav = "".join(f'<a href="{p}.html"{CURRENT_PAGE if p == page else ""}>{e(label)}</a>' for p, label in zip(NAV, NAV_LABELS[lang]))
     switch = "".join(
         f'<a href="{prefix}{LANGS[code]}{page}.html" hreflang="{code}" lang="{code}" title="{LANG_NAME[code]}"'
         f'{CURRENT_LANG if code == lang else ""}>{LANG_LABEL[code]}</a>' for code in LANGS)
