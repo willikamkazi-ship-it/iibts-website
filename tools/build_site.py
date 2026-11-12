@@ -6,10 +6,8 @@ content source, in English (root), Kiswahili (sw/) and French (fr/).
     python3 tools/build_site.py --check    # exits 1 if a page is out of date
 
 Rules kept by this file (see tools/check_site.cjs for the tests):
-  * no fees, dates, working e-mail addresses, accreditation or partnership
-    claims: fees and start dates are "to be announced" until the owner
-    approves them, and WhatsApp (+255 704 686 885, already published on
-    the earlier site) is the only contact channel;
+  * enrollment happens through WhatsApp (+255 704 686 885); the public
+    course pages omit fee and start-date announcements;
   * no draft lessons, answer keys or lecturer guides: they live only in
     the private review area, never in this repository;
   * PREVIEW = True puts a "preview — not yet published" banner on every
@@ -138,7 +136,7 @@ UI = {
            "tagline": "Biblical Truth • Theological Depth • Ministry Formation",
            "foot_about": "An online school for Bible, theology and ministry skills, taught through WhatsApp and PDF lessons.",
            "foot_links": "Pages", "foot_contact": "Contact", "wa": "WhatsApp", "copy": "Online Bible & Theology School",
-           "modules": "modules", "tba": "Fees and start date: to be announced", "soon": "Registration not yet open",
+           "modules": "modules", "soon": "Registration not yet open",
            "open": "Registration enquiries open", "ask": "Ask on WhatsApp", "lang_label": "Language"},
     "sw": {"nav": {"index": "Mwanzo", "about": "Kuhusu", "courses": "Kozi", "how-to-learn": "Jinsi ya kujifunza",
                    "admissions": "Usajili", "contact": "Mawasiliano", "faq": "Maswali", "privacy": "Faragha",
@@ -149,7 +147,7 @@ UI = {
            "tagline": "Biblical Truth • Theological Depth • Ministry Formation",
            "foot_about": "Shule ya mtandaoni ya Biblia, theolojia na ujuzi wa huduma, inayofundisha kupitia WhatsApp na masomo ya PDF.",
            "foot_links": "Kurasa", "foot_contact": "Mawasiliano", "wa": "WhatsApp", "copy": "Online Bible & Theology School",
-           "modules": "moduli", "tba": "Ada na tarehe ya kuanza: zitatangazwa", "soon": "Usajili bado haujafunguliwa",
+           "modules": "moduli", "soon": "Usajili bado haujafunguliwa",
            "open": "Maswali ya usajili yanapokelewa", "ask": "Uliza kwa WhatsApp", "lang_label": "Lugha"},
     "fr": {"nav": {"index": "Accueil", "about": "À propos", "courses": "Cours", "how-to-learn": "Comment apprendre",
                    "admissions": "Inscription", "contact": "Contact", "faq": "Questions", "privacy": "Confidentialité",
@@ -160,7 +158,7 @@ UI = {
            "tagline": "Biblical Truth • Theological Depth • Ministry Formation",
            "foot_about": "Une école en ligne de Bible, de théologie et de compétences pour le ministère, par WhatsApp et des leçons en PDF.",
            "foot_links": "Pages", "foot_contact": "Contact", "wa": "WhatsApp", "copy": "Online Bible & Theology School",
-           "modules": "modules", "tba": "Frais et date de début : à annoncer", "soon": "Inscriptions pas encore ouvertes",
+           "modules": "modules", "soon": "Inscriptions pas encore ouvertes",
            "open": "Demandes d'inscription ouvertes", "ask": "Demander sur WhatsApp", "lang_label": "Langue"},
 }
 
@@ -192,7 +190,7 @@ def course_cards(lang, *, with_photos=False):
     ui = UI[lang]
     cards = []
     for course in COURSES:
-        status = (f'<span class="tag">{e(ui["open"])}</span><span class="tag wait">{e(ui["tba"])}</span>' if course["open"]
+        status = (f'<span class="tag">{e(ui["open"])}</span>' if course["open"]
                   else f'<span class="tag wait">{e(ui["soon"])}</span>')
         code = course["code"].lower()
         photo = (f'<img class="course-photo" src="{{assets}}img/learning/{code}.webp" width="480" height="320" '
@@ -477,7 +475,7 @@ LEARNING_PAGES = {
         "join-obts": ("Complete enrollment",
             '''<section class="section"><div class="wrap"><h1>Complete enrollment</h1>
 <p>Online Bible &amp; Theology School (OBTS) offers Bible and theology lessons in Swahili, English and French. Lessons are free.</p>
-<p>Start your enrollment on WhatsApp. There you’ll find the applicable costs and payment instructions.</p>
+<p>Start your enrollment on WhatsApp and follow the instructions from OBTS.</p>
 <p><a class="btn" href="{enrollment_link}">Continue on WhatsApp</a></p>
 <p><a href="learn.html">Browse sample lessons</a></p></div></section>'''),
     },
@@ -485,7 +483,7 @@ LEARNING_PAGES = {
         "join-obts": ("Kamilisha usajili",
             '''<section class="section"><div class="wrap"><h1>Kamilisha usajili</h1>
 <p>Online Bible &amp; Theology School (OBTS) hutoa masomo ya Biblia na theolojia kwa Kiswahili, Kiingereza na Kifaransa. Masomo ni bure.</p>
-<p>Anza usajili kwenye WhatsApp. Huko utapata taarifa za gharama zinazokuhusu na maelekezo ya malipo.</p>
+<p>Anza usajili kwenye WhatsApp na ufuate maelekezo ya OBTS.</p>
 <p><a class="btn" href="{enrollment_link}">Endelea kwenye WhatsApp</a></p>
 <p><a href="learn.html">Soma masomo ya mfano</a></p></div></section>'''),
     },
@@ -493,7 +491,7 @@ LEARNING_PAGES = {
         "join-obts": ("Finaliser l’inscription",
             '''<section class="section"><div class="wrap"><h1>Finaliser l’inscription</h1>
 <p>Online Bible &amp; Theology School (OBTS) propose des cours de Bible et de théologie en kiswahili, en anglais et en français. Les cours sont gratuits.</p>
-<p>Commencez votre inscription sur WhatsApp. Vous y trouverez les tarifs applicables et les modalités de paiement.</p>
+<p>Commencez votre inscription sur WhatsApp et suivez les instructions d’OBTS.</p>
 <p><a class="btn" href="{enrollment_link}">Continuer sur WhatsApp</a></p>
 <p><a href="learn.html">Voir les leçons d’exemple</a></p></div></section>'''),
     },
@@ -558,7 +556,7 @@ def body(lang, page):
 <li>You send your task to your tutor on WhatsApp (text, or a voice message for the English courses).</li>
 <li>After sending your task, you open the answer key and receive feedback.</li></ol>
 <p><a href="how-to-learn.html">More about how to learn</a></p></section>
-<div class="note gold">Fees and start dates have not yet been announced. Ask on <a href="{wa}">WhatsApp</a> and admissions will reply when they are confirmed.</div></div>'''),
+{services_grid(lang)}</div>'''),
             "about": ("About OBTS", "OBTS is an online school for Bible, theology and practical ministry skills.",
                       f'''<p>The Online Bible &amp; Theology School (OBTS) teaches through lessons that a student can follow on an ordinary phone. The motto in its logo — <em>Biblical Truth • Theological Depth • Ministry Formation</em> — describes what the school aims at: understanding Scripture well, thinking carefully about Christian doctrine, and growing in the skills of ministry and service.</p>
 <h2>How OBTS teaches</h2><div class="grid">
@@ -569,7 +567,7 @@ def body(lang, page):
             "courses": ("Courses", "Seven courses, each divided into modules and taught lesson by lesson.",
                         f'''{course_cards(lang, with_photos=True)}
 <div class="note"><strong>Language of the lessons.</strong> General Bible Studies &amp; Theology (GB): lessons 1–25 (modules 1–3) have been written in English, Kiswahili and French and are being reviewed by lecturers. A lesson is sent only after a lecturer has approved it in that language; the student then receives it in the language chosen at registration, as a PDF lesson and summary pages on WhatsApp. B66, PE, ES, CL and ENT are written first in English and the AI course in Kiswahili; their Kiswahili and French versions are being prepared and checked, so ask admissions which language is available. Pastoral English and English Speaking teach English, so their exercises stay in English.</div>
-<div class="note gold">Fees, start dates and the number of courses you may take at the same time will be announced by admissions. <a href="{wa}">Ask on WhatsApp</a>.</div>'''),
+'''),
             "how-to-learn": ("How to learn with OBTS", "What you need, what a lesson contains and how you send your work.",
                              '''<h2>What you need</h2><ul><li>A phone with WhatsApp and a PDF reader.</li><li>A Bible for the Bible and theology courses.</li><li>A quiet time for each lesson: most lessons are planned for 40 to 90 minutes.</li></ul>
 <h2>What a lesson contains</h2><div class="grid">
@@ -607,7 +605,7 @@ def body(lang, page):
 <li>Unamtumia mkufunzi wako kazi kwa WhatsApp (maandishi, au ujumbe wa sauti kwa kozi za Kiingereza).</li>
 <li>Baada ya kutuma kazi, unafungua majibu na kupokea mrejesho.</li></ol>
 <p><a href="how-to-learn.html">Zaidi kuhusu jinsi ya kujifunza</a></p></section>
-<div class="note gold">Ada na tarehe za kuanza bado hazijatangazwa. Uliza kwa <a href="{wa}">WhatsApp</a> na ofisi ya usajili itakujibu zikithibitishwa.</div></div>'''),
+{services_grid(lang)}</div>'''),
             "about": ("Kuhusu OBTS", "OBTS ni shule ya mtandaoni ya Biblia, theolojia na ujuzi wa vitendo wa huduma.",
                       f'''<p>Online Bible &amp; Theology School (OBTS) inafundisha kupitia masomo ambayo mwanafunzi anaweza kuyafuata kwa simu ya kawaida. Kauli mbiu iliyo kwenye nembo yake — <em>Biblical Truth • Theological Depth • Ministry Formation</em> (Ukweli wa Biblia • Kina cha Theolojia • Malezi ya Huduma) — inaeleza lengo la shule: kuyaelewa Maandiko vizuri, kufikiri kwa makini kuhusu mafundisho ya Kikristo, na kukua katika ujuzi wa huduma.</p>
 <h2>OBTS inavyofundisha</h2><div class="grid">
@@ -618,7 +616,7 @@ def body(lang, page):
             "courses": ("Kozi", "Kozi saba, kila moja imegawanywa katika moduli na kufundishwa somo kwa somo.",
                         f'''{course_cards(lang, with_photos=True)}
 <div class="note"><strong>Lugha ya masomo.</strong> Mafunzo ya Jumla ya Biblia na Theolojia (GB): masomo 1–25 (moduli 1–3) yameandikwa kwa Kiingereza, Kiswahili na Kifaransa na yanakaguliwa na wahadhiri. Somo linatumwa tu baada ya mhadhiri kuliidhinisha kwa lugha hiyo; kisha mwanafunzi analipokea kwa lugha aliyoichagua wakati wa kujisajili, kama somo la PDF pamoja na kurasa za muhtasari kwenye WhatsApp. B66, PE, ES, CL na ENT zinaandikwa kwanza kwa Kiingereza na kozi ya AI kwa Kiswahili; matoleo yake ya Kiswahili na Kifaransa yanaandaliwa na kukaguliwa, hivyo uliza ofisi ya usajili lugha inayopatikana. Kiingereza cha Kichungaji na Kuzungumza Kiingereza vinafundisha Kiingereza, hivyo mazoezi yake yanabaki kwa Kiingereza.</div>
-<div class="note gold">Ada, tarehe za kuanza na idadi ya kozi unazoweza kusoma kwa wakati mmoja zitatangazwa na ofisi ya usajili. <a href="{wa}">Uliza kwa WhatsApp</a>.</div>'''),
+'''),
             "how-to-learn": ("Jinsi ya kujifunza na OBTS", "Unachohitaji, kilichomo kwenye somo na jinsi ya kutuma kazi yako.",
                              '''<h2>Unachohitaji</h2><ul><li>Simu yenye WhatsApp na programu ya kusoma PDF.</li><li>Biblia kwa kozi za Biblia na theolojia.</li><li>Muda wa utulivu kwa kila somo: masomo mengi yamepangwa kwa dakika 40 hadi 90.</li></ul>
 <h2>Kilichomo kwenye somo</h2><div class="grid">
@@ -655,7 +653,7 @@ def body(lang, page):
 <li>Vous envoyez votre tâche à votre tuteur sur WhatsApp (texte, ou message vocal pour les cours d'anglais).</li>
 <li>Après l'envoi, vous ouvrez le corrigé et recevez un retour.</li></ol>
 <p><a href="how-to-learn.html">En savoir plus sur la manière d'apprendre</a></p></section>
-<div class="note gold">Les frais et les dates de début n'ont pas encore été annoncés. Demandez sur <a href="{wa}">WhatsApp</a> : le service des inscriptions répondra dès qu'ils seront confirmés.</div></div>'''),
+{services_grid(lang)}</div>'''),
             "about": ("À propos d'OBTS", "OBTS est une école en ligne de Bible, de théologie et de compétences pratiques pour le ministère.",
                       f'''<p>L'Online Bible &amp; Theology School (OBTS) enseigne au moyen de leçons qu'un étudiant peut suivre sur un téléphone ordinaire. La devise de son logo — <em>Biblical Truth • Theological Depth • Ministry Formation</em> (Vérité biblique • Profondeur théologique • Formation au ministère) — décrit son but : bien comprendre l'Écriture, réfléchir avec soin à la doctrine chrétienne et grandir dans les compétences du ministère.</p>
 <h2>Comment OBTS enseigne</h2><div class="grid">
@@ -666,7 +664,7 @@ def body(lang, page):
             "courses": ("Cours", "Sept cours, chacun divisé en modules et enseigné leçon par leçon.",
                         f'''{course_cards(lang, with_photos=True)}
 <div class="note"><strong>Langue des leçons.</strong> Études bibliques générales et théologie (GB) : les leçons 1 à 25 (modules 1 à 3) ont été rédigées en anglais, en kiswahili et en français et sont en cours de vérification par des enseignants. Une leçon n'est envoyée qu'après son approbation par un enseignant dans cette langue ; l'étudiant la reçoit alors dans la langue choisie lors de l'inscription, sous forme de leçon PDF et de pages de résumé sur WhatsApp. B66, PE, ES, CL et ENT sont d'abord écrits en anglais et le cours d'IA en kiswahili ; leurs versions en kiswahili et en français sont en préparation et en vérification : demandez au service des inscriptions quelle langue est disponible. L'anglais pastoral et l'anglais oral enseignent l'anglais : leurs exercices restent en anglais.</div>
-<div class="note gold">Les frais, les dates de début et le nombre de cours que vous pouvez suivre en même temps seront annoncés par le service des inscriptions. <a href="{wa}">Demandez sur WhatsApp</a>.</div>'''),
+'''),
             "how-to-learn": ("Comment apprendre avec OBTS", "Ce dont vous avez besoin, le contenu d'une leçon et l'envoi de votre travail.",
                              '''<h2>Ce dont vous avez besoin</h2><ul><li>Un téléphone avec WhatsApp et un lecteur de PDF.</li><li>Une Bible pour les cours de Bible et de théologie.</li><li>Un moment calme pour chaque leçon : la plupart des leçons sont prévues pour 40 à 90 minutes.</li></ul>
 <h2>Le contenu d'une leçon</h2><div class="grid">
@@ -701,9 +699,7 @@ def body(lang, page):
                                                     f'{e(SYLLABUS_TEXT[lang]["see"])}</a></p>')
     item = content[page]
     if page == "index":
-        home = item[1]
-        cut = home.rindex('<div class="note gold">')
-        return item[0], home[:cut] + services_grid(lang) + home[cut:], True
+        return item[0], item[1], True
     title, intro, html_body = item
     if html_body is None:
         html_body = {"admissions": admissions, "faq": faq, "privacy": privacy, "terms": terms,
@@ -714,7 +710,7 @@ def body(lang, page):
 
 FORM = {
     "en": {"steps": ["Fill in the form and press the button: WhatsApp opens with your message.",
-                     "Send the message. Admissions replies and confirms the course, the language, the fees and the start date.",
+                     "Send the message. Admissions replies and confirms the course and language.",
                      "For Pastoral English or English Speaking, you first make a one-minute placement recording.",
                      "You receive your first lesson on WhatsApp."],
            "name": "Full name", "phone": "WhatsApp number", "place": "Town and country", "language": "Preferred language",
@@ -725,7 +721,7 @@ FORM = {
            "continue": "Continue to WhatsApp", "prepared": "Your message is ready. If WhatsApp did not open, use the button below. Review your details and press Send in WhatsApp to complete your enquiry.", "no_js": "To register without this form, contact OBTS on WhatsApp.",
            "privacy": "privacy policy", "phone_hint": "With country code, for example +255 …"},
     "sw": {"steps": ["Jaza fomu na ubonyeze kitufe: WhatsApp inafunguka na ujumbe wako.",
-                     "Tuma ujumbe. Ofisi ya usajili inajibu na kuthibitisha kozi, lugha, ada na tarehe ya kuanza.",
+                     "Tuma ujumbe. Ofisi ya usajili inajibu na kuthibitisha kozi na lugha.",
                      "Kwa Kiingereza cha Kichungaji au Kuzungumza Kiingereza, kwanza unarekodi sauti ya upimaji ya dakika moja.",
                      "Unapokea somo lako la kwanza kwenye WhatsApp."],
            "name": "Jina kamili", "phone": "Namba ya WhatsApp", "place": "Mji na nchi", "language": "Lugha unayopendelea",
@@ -736,7 +732,7 @@ FORM = {
            "continue": "Endelea WhatsApp", "prepared": "Ujumbe wako uko tayari. WhatsApp isipofunguka, tumia kitufe hapa chini. Hakiki taarifa zako na ubonyeze Tuma kwenye WhatsApp ili kukamilisha ombi lako.", "no_js": "Kujisajili bila fomu hii, wasiliana na OBTS kupitia WhatsApp.",
            "privacy": "sera ya faragha", "phone_hint": "Pamoja na msimbo wa nchi, kwa mfano +255 …"},
     "fr": {"steps": ["Remplissez le formulaire et appuyez sur le bouton : WhatsApp s'ouvre avec votre message.",
-                     "Envoyez le message. Le service des inscriptions répond et confirme le cours, la langue, les frais et la date de début.",
+                     "Envoyez le message. Le service des inscriptions répond et confirme le cours et la langue.",
                      "Pour l'anglais pastoral ou l'anglais oral, vous faites d'abord un enregistrement de placement d'une minute.",
                      "Vous recevez votre première leçon sur WhatsApp."],
            "name": "Nom complet", "phone": "Numéro WhatsApp", "place": "Ville et pays", "language": "Langue préférée",
@@ -760,7 +756,7 @@ def admissions(lang):
     text = json.dumps({k: f[k] for k in ("name", "phone", "place", "language", "courses", "message", "consent",
                                           "missing", "intro")}, ensure_ascii=False)
     return f'''<div class="grid" style="align-items:start"><div><h2 style="margin-top:0">{e(ui["nav"]["admissions"])}</h2><ol class="steps">{steps}</ol>
-<div class="note gold">{e(ui["tba"])}.</div></div>
+</div>
 <form class="reg" id="registration" novalidate data-wa="{WHATSAPP}" data-text="{e(text)}">
 <div class="field"><label for="f-name">{e(f["name"])}</label><input type="text" id="f-name" name="name" autocomplete="name" required></div>
 <div class="field"><label for="f-phone">{e(f["phone"])}</label><input type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel" required placeholder="+255" aria-describedby="f-phone-hint"><div class="hint" id="f-phone-hint">{e(f["phone_hint"])}</div></div>
@@ -779,21 +775,18 @@ def admissions(lang):
 FAQ = {
     "en": [("Who can study at OBTS?", "Anyone who wants to learn and can follow lessons on a phone. Pastoral English starts from a basic level of English (A2); English Speaking starts with a placement recording."),
            ("Do I need a computer?", "No. A phone with WhatsApp and a PDF reader is enough."),
-           ("How much are the fees, and when do courses start?", "Fees and start dates have not yet been announced. Ask on WhatsApp and admissions will tell you when they are confirmed."),
            ("Can I take more than one course?", "Admissions will confirm how many courses you can take at the same time."),
            ("In which language are the lessons?", "General Bible Studies & Theology: the first 25 lessons have been written in English, Kiswahili and French and are being reviewed by lecturers; once approved, you receive them in the language you choose when you register. The other courses are written first in English, and the AI course in Kiswahili; their Kiswahili and French versions are being prepared and reviewed, and admissions will tell you what is available."),
            ("Will I receive a certificate?", "Information about certificates will be given only when it has been approved. Please do not rely on any promise that is not on this website or from OBTS admissions."),
            ("How are my details used?", "See the privacy policy. The registration form on this website stores nothing; it only prepares a WhatsApp message.")],
     "sw": [("Nani anaweza kusoma OBTS?", "Yeyote anayetaka kujifunza na anayeweza kufuata masomo kwa simu. Kiingereza cha Kichungaji kinaanza kiwango cha msingi cha Kiingereza (A2); Kuzungumza Kiingereza kinaanza kwa kurekodi sauti ya upimaji."),
            ("Je, ninahitaji kompyuta?", "Hapana. Simu yenye WhatsApp na programu ya kusoma PDF inatosha."),
-           ("Ada ni kiasi gani, na kozi zinaanza lini?", "Ada na tarehe za kuanza bado hazijatangazwa. Uliza kwa WhatsApp na ofisi ya usajili itakueleza zikithibitishwa."),
            ("Je, ninaweza kusoma zaidi ya kozi moja?", "Ofisi ya usajili itathibitisha idadi ya kozi unazoweza kusoma kwa wakati mmoja."),
            ("Masomo yako kwa lugha gani?", "Mafunzo ya Jumla ya Biblia na Theolojia: masomo 25 ya kwanza yameandikwa kwa Kiingereza, Kiswahili na Kifaransa na yanakaguliwa na wahadhiri; yakishaidhinishwa, unayapokea kwa lugha utakayochagua wakati wa kujisajili. Kozi nyingine zinaandikwa kwanza kwa Kiingereza, na kozi ya AI kwa Kiswahili; matoleo yake ya Kiswahili na Kifaransa yanaandaliwa na kukaguliwa, na ofisi ya usajili itakueleza kinachopatikana."),
            ("Je, nitapata cheti?", "Taarifa kuhusu vyeti zitatolewa tu zitakapoidhinishwa. Tafadhali usitegemee ahadi yoyote isiyo kwenye tovuti hii au kutoka ofisi ya usajili ya OBTS."),
            ("Taarifa zangu zinatumikaje?", "Tazama sera ya faragha. Fomu ya usajili kwenye tovuti hii haihifadhi chochote; inaandaa ujumbe wa WhatsApp tu.")],
     "fr": [("Qui peut étudier à OBTS ?", "Toute personne qui veut apprendre et peut suivre des leçons sur un téléphone. L'anglais pastoral commence à un niveau d'anglais de base (A2) ; l'anglais oral commence par un enregistrement de placement."),
            ("Ai-je besoin d'un ordinateur ?", "Non. Un téléphone avec WhatsApp et un lecteur de PDF suffit."),
-           ("Quels sont les frais, et quand les cours commencent-ils ?", "Les frais et les dates de début n'ont pas encore été annoncés. Demandez sur WhatsApp : le service des inscriptions vous informera dès qu'ils seront confirmés."),
            ("Puis-je suivre plus d'un cours ?", "Le service des inscriptions confirmera combien de cours vous pouvez suivre en même temps."),
            ("Dans quelle langue sont les leçons ?", "Études bibliques générales et théologie : les 25 premières leçons ont été rédigées en anglais, en kiswahili et en français et sont en cours de vérification par des enseignants ; une fois approuvées, vous les recevez dans la langue choisie lors de votre inscription. Les autres cours sont d'abord écrits en anglais, et le cours d'IA en kiswahili ; leurs versions en kiswahili et en français sont en préparation et en révision, et le service des inscriptions vous dira ce qui est disponible."),
            ("Recevrai-je un certificat ?", "Les informations sur les certificats seront données seulement lorsqu'elles auront été approuvées. Ne vous fiez à aucune promesse qui ne figure pas sur ce site ou ne vient pas du service des inscriptions d'OBTS."),
@@ -844,19 +837,19 @@ def privacy(lang):
 TERMS = {
     "en": [("Purpose", "This website gives information about the Online Bible & Theology School (OBTS) and lets you contact admissions."),
            ("Course materials", "Lessons and other materials sent to students are for the student's personal study. Please do not publish or sell them without written permission from OBTS."),
-           ("Information on this website", "OBTS works to keep this information correct. Fees, dates, certificates and other details are valid only when OBTS announces them; anything not yet announced is shown as \"to be announced\"."),
+           ("Information on this website", "OBTS works to keep this information correct. Check official OBTS communications for information about enrollment and certificates."),
            ("Draft materials", "Draft lessons, answer keys and lecturer guides are not published on this website and are not sent to students before they are approved."),
            ("Respect in learning groups", "Students are asked to communicate respectfully with tutors and other students, and to protect other people's personal information."),
            ("Changes", "These terms may be updated. The date below shows the latest version.")],
     "sw": [("Lengo", "Tovuti hii inatoa taarifa kuhusu Online Bible & Theology School (OBTS) na inakuwezesha kuwasiliana na ofisi ya usajili."),
            ("Vifaa vya kozi", "Masomo na vifaa vingine vinavyotumwa kwa wanafunzi ni kwa ajili ya kujifunza binafsi kwa mwanafunzi. Tafadhali usivichapishe wala kuviuza bila ruhusa ya maandishi kutoka OBTS."),
-           ("Taarifa kwenye tovuti hii", "OBTS inajitahidi kuweka taarifa hizi sahihi. Ada, tarehe, vyeti na mambo mengine ni halali tu OBTS inapoyatangaza; chochote kisichotangazwa bado kinaonyeshwa kama \"kitatangazwa\"."),
+           ("Taarifa kwenye tovuti hii", "OBTS inajitahidi kuweka taarifa hizi sahihi. Thibitisha taarifa za usajili na vyeti kupitia mawasiliano rasmi ya OBTS."),
            ("Rasimu", "Rasimu za masomo, majibu na miongozo ya wahadhiri hazichapishwi kwenye tovuti hii na hazitumwi kwa wanafunzi kabla ya kuidhinishwa."),
            ("Heshima katika vikundi vya kujifunza", "Wanafunzi wanaombwa kuwasiliana kwa heshima na wakufunzi na wanafunzi wengine, na kulinda taarifa binafsi za watu wengine."),
            ("Mabadiliko", "Masharti haya yanaweza kusasishwa. Tarehe iliyo hapa chini inaonyesha toleo la karibuni.")],
     "fr": [("Objet", "Ce site donne des informations sur l'Online Bible & Theology School (OBTS) et vous permet de contacter le service des inscriptions."),
            ("Documents de cours", "Les leçons et autres documents envoyés aux étudiants sont destinés à l'étude personnelle de l'étudiant. Merci de ne pas les publier ni les vendre sans l'autorisation écrite d'OBTS."),
-           ("Informations de ce site", "OBTS s'efforce de garder ces informations exactes. Les frais, dates, certificats et autres détails ne sont valables que lorsqu'OBTS les annonce ; ce qui n'est pas encore annoncé est indiqué « à annoncer »."),
+           ("Informations de ce site", "OBTS s'efforce de garder ces informations exactes. Vérifiez les informations sur l’inscription et les certificats auprès d’OBTS."),
            ("Brouillons", "Les brouillons de leçons, les corrigés et les guides de l'enseignant ne sont pas publiés sur ce site et ne sont pas envoyés aux étudiants avant leur approbation."),
            ("Respect dans les groupes d'apprentissage", "Les étudiants sont priés de communiquer avec respect avec les tuteurs et les autres étudiants, et de protéger les informations personnelles d'autrui."),
            ("Modifications", "Ces conditions peuvent être mises à jour. La date ci-dessous indique la dernière version.")],
@@ -889,21 +882,21 @@ SYLLABUS_TEXT = {
            "see": "See the syllabus (modules of every course)",
            "lang_note": "Module titles are shown in English, the language of the curriculum; Kiswahili and French titles will be added when they are approved. The first 25 GB lessons (modules 1–3) have been written in English, Kiswahili and French and are being reviewed; each is sent in the student's language only after a lecturer approves it. The AI course titles are given in all three languages.",
            "code": "Code", "module": "Module", "details": "Grade · track · lessons · days", "lessons": "Lessons", "days": "Days", "grade": "Grade", "track": "Track",
-           "modules": "modules", "proposed": "Proposed structure — awaiting the school's approval. It has 16 modules and 56 lessons; each student takes 13 modules (47 lessons, 120 days), choosing the video or the audio track in Grade III. Fees and start dates are not yet announced.",
+           "modules": "modules", "proposed": "Proposed structure — awaiting the school's approval. It has 16 modules and 56 lessons; each student takes 13 modules (47 lessons, 120 days), choosing the video or the audio track in Grade III.",
            "no_promise": "The course does not promise employment or income.",
            "tracks": {"maandishi": "writing", "video": "video", "audio": "audio", "tovuti": "website", "mradi": "final project"}},
     "sw": {"title": "Mtaala", "intro": "Moduli za kila kozi, kwa mpangilio.",
            "see": "Tazama mtaala (moduli za kila kozi)",
            "lang_note": "Majina ya moduli yanaonyeshwa kwa Kiingereza, lugha ya mtaala; majina ya Kiswahili na Kifaransa yataongezwa yatakapoidhinishwa. Masomo 25 ya kwanza ya GB (moduli 1–3) yameandikwa kwa Kiingereza, Kiswahili na Kifaransa na yanakaguliwa; kila somo linatumwa kwa lugha ya mwanafunzi tu baada ya mhadhiri kuliidhinisha. Majina ya kozi ya AI yapo kwa lugha zote tatu.",
            "code": "Namba", "module": "Moduli", "details": "Daraja · njia · masomo · siku", "lessons": "Masomo", "days": "Siku", "grade": "Daraja", "track": "Njia",
-           "modules": "moduli", "proposed": "Muundo unaopendekezwa — unasubiri idhini ya shule. Una moduli 16 na masomo 56; kila mwanafunzi anachukua moduli 13 (masomo 47, siku 120), akichagua njia ya video au ya audio katika Daraja III. Ada na tarehe za kuanza bado hazijatangazwa.",
+           "modules": "moduli", "proposed": "Muundo unaopendekezwa — unasubiri idhini ya shule. Una moduli 16 na masomo 56; kila mwanafunzi anachukua moduli 13 (masomo 47, siku 120), akichagua njia ya video au ya audio katika Daraja III.",
            "no_promise": "Kozi haiahidi ajira wala mapato.",
            "tracks": {"maandishi": "maandishi", "video": "video", "audio": "audio", "tovuti": "tovuti", "mradi": "mradi wa mwisho"}},
     "fr": {"title": "Programme", "intro": "Les modules de chaque cours, dans l'ordre.",
            "see": "Voir le programme (modules de chaque cours)",
            "lang_note": "Les titres des modules sont donnés en anglais, la langue du programme ; les titres en kiswahili et en français seront ajoutés lorsqu'ils seront approuvés. Les 25 premières leçons de GB (modules 1 à 3) ont été rédigées en anglais, en kiswahili et en français et sont en cours de vérification ; chacune n'est envoyée dans la langue de l'étudiant qu'après son approbation par un enseignant. Les titres du cours d'IA sont donnés dans les trois langues.",
            "code": "Code", "module": "Module", "details": "Niveau · parcours · leçons · jours", "lessons": "Leçons", "days": "Jours", "grade": "Niveau", "track": "Parcours",
-           "modules": "modules", "proposed": "Structure proposée — en attente de l'approbation de l'école. Elle compte 16 modules et 56 leçons ; chaque étudiant suit 13 modules (47 leçons, 120 jours), en choisissant le parcours vidéo ou audio au niveau III. Les frais et les dates de début ne sont pas encore annoncés.",
+           "modules": "modules", "proposed": "Structure proposée — en attente de l'approbation de l'école. Elle compte 16 modules et 56 leçons ; chaque étudiant suit 13 modules (47 leçons, 120 jours), en choisissant le parcours vidéo ou audio au niveau III.",
            "no_promise": "Le cours ne promet ni emploi ni revenu.",
            "tracks": {"maandishi": "écrit", "video": "vidéo", "audio": "audio", "tovuti": "site web", "mradi": "projet final"}},
 }
