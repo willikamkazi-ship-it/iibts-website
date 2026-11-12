@@ -25,9 +25,9 @@ p { margin: 0 0 1em; }
 
 /* Header */
 .site-header { background: var(--ivory); border-bottom: 3px solid var(--gold); position: sticky; top: 0; z-index: 20; }
-.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 72px; }
+.bar { max-width: 1240px; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 72px; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--navy); }
-.brand img { flex: none; height: 56px; width: auto; display: block; }
+.brand img { flex: none; height: 56px; width: 84px; max-width: none; display: block; }
 .brand span { font-family: var(--serif); font-weight: 700; font-size: 1rem; line-height: 1.2; max-width: 15ch; }
 .nav { display: flex; align-items: center; gap: 4px; }
 .nav a { text-decoration: none; color: var(--navy); font-weight: 600; font-size: .95rem; padding: 8px 7px; border-radius: 6px; white-space: nowrap; }
