@@ -167,6 +167,13 @@ def wa_link(command=""):
     return f"https://wa.me/{WHATSAPP}" + ("?" + urlencode({"text": command}) if command else "")
 
 
+SAMPLE_LESSON_UI = {
+    "en": ("Sample lessons", "Choose a course, then open a lesson to read and try the exercise.", "Join OBTS"),
+    "sw": ("Masomo ya mfano", "Chagua kozi, kisha fungua somo usome na ujaribu zoezi.", "Jiunge na OBTS"),
+    "fr": ("Leçons d’exemple", "Choisissez un cours, puis ouvrez une leçon pour la lire et faire l’exercice.", "Rejoindre OBTS"),
+}
+
+
 HERO_PHOTO_ALT = {
     "en": "A learner studying with an open Bible, a notebook and a phone",
     "sw": "Mwanafunzi akisoma Biblia akiwa na daftari na simu",
@@ -188,9 +195,11 @@ def course_cards(lang, *, with_photos=False):
         code = course["code"].lower()
         photo = (f'<img class="course-photo" src="{{assets}}img/learning/{code}.webp" width="480" height="320" '
                  'alt="" loading="lazy" decoding="async">' if with_photos else '')
+        sample_link = (f'<p><a class="btn navy" href="learn.html#{code}">{e(SAMPLE_LESSON_UI[lang][0])}</a></p>'
+                       if with_photos else '')
         cards.append(f'<article class="card{"" if course["open"] else " gold"}" id="{code}">{photo}'
                      f'<h3>{e(course["name"][lang])}</h3><p>{status}<span class="tag">{course["modules"]} {e(ui["modules"])}'
-                     f'</span></p><p>{e(course["text"][lang])}</p></article>')
+                     f'</span></p><p>{e(course["text"][lang])}</p>{sample_link}</article>')
     return '<div class="grid">' + "".join(cards) + "</div>"
 
 
@@ -424,57 +433,71 @@ def service_page(lang, page):
 
 LEARNING_PAGES = {
     "en": {
-        "learn": ("Study Bible and Theology",
-            '''<section class="section"><div class="wrap"><h1>Study Bible and Theology</h1>
-<p>Online Bible &amp; Theology School (OBTS) offers Bible and theology lessons in Swahili, English and French. Lessons are free.</p>
-<p>Start with Foundations of Bible and Theology. Read a lesson, complete an exercise and receive feedback from your lecturer.</p>
-<p><a href="courses.html">Course catalogue</a> · <a href="portal.html">Enter your classroom</a></p>
-<article><h2>Read a sample lesson</h2><h3>How to read a Bible passage in context</h3><p>Read 2 Timothy 3:14–17. Identify whom Paul is writing to and read the verses preceding verse 16. Notice how Paul connects learning Scripture with being equipped for good works.</p>
-<p>Practice: In your own words, name two uses of Scripture in this passage. Give one example of how you will apply what you learned this week.</p></article>
-<p><a class="btn" href="join-obts.html">Join OBTS</a></p></div></section>'''),
         "join-obts": ("Complete enrollment",
             '''<section class="section"><div class="wrap"><h1>Complete enrollment</h1>
 <p>Online Bible &amp; Theology School (OBTS) offers Bible and theology lessons in Swahili, English and French. Lessons are free.</p>
 <p>Start your enrollment on WhatsApp. There you’ll find the applicable costs and payment instructions.</p>
 <p><a class="btn" href="{enrollment_link}">Continue on WhatsApp</a></p>
-<p><a href="learn.html">Read a sample lesson</a></p></div></section>'''),
+<p><a href="learn.html">Browse sample lessons</a></p></div></section>'''),
     },
     "sw": {
-        "learn": ("Jifunze Biblia na Theolojia",
-            '''<section class="section"><div class="wrap"><h1>Jifunze Biblia na Theolojia</h1>
-<p>Online Bible &amp; Theology School (OBTS) hutoa masomo ya Biblia na theolojia kwa Kiswahili, Kiingereza na Kifaransa. Masomo ni bure.</p>
-<p>Anza na Misingi ya Biblia na Theolojia. Utasoma somo, utafanya zoezi na utapata mrejesho wa mhadhiri.</p>
-<p><a href="courses.html">Orodha ya kozi</a> · <a href="portal.html">Ingia darasani</a></p>
-<article><h2>Soma somo la mfano</h2><h3>Jinsi ya kusoma kifungu cha Biblia kwa muktadha</h3><p>Soma 2 Timotheo 3:14–17. Tambua Paulo anamwandikia nani, kisha soma mistari inayotangulia mstari wa 16. Angalia jinsi Paulo anavyounganisha kujifunza Maandiko na kujiandaa kwa matendo mema.</p>
-<p>Zoezi la kujipima: Kwa maneno yako mwenyewe, taja matumizi mawili ya Maandiko katika kifungu hiki. Toa mfano mmoja wa jinsi utakavyotumia ulichojifunza wiki hii.</p></article>
-<p><a class="btn" href="join-obts.html">Jiunge na OBTS</a></p></div></section>'''),
         "join-obts": ("Kamilisha usajili",
             '''<section class="section"><div class="wrap"><h1>Kamilisha usajili</h1>
 <p>Online Bible &amp; Theology School (OBTS) hutoa masomo ya Biblia na theolojia kwa Kiswahili, Kiingereza na Kifaransa. Masomo ni bure.</p>
 <p>Anza usajili kwenye WhatsApp. Huko utapata taarifa za gharama zinazokuhusu na maelekezo ya malipo.</p>
 <p><a class="btn" href="{enrollment_link}">Endelea kwenye WhatsApp</a></p>
-<p><a href="learn.html">Soma somo la mfano</a></p></div></section>'''),
+<p><a href="learn.html">Soma masomo ya mfano</a></p></div></section>'''),
     },
     "fr": {
-        "learn": ("Étudier la Bible et la théologie",
-            '''<section class="section"><div class="wrap"><h1>Étudier la Bible et la théologie</h1>
-<p>Online Bible &amp; Theology School (OBTS) propose des cours de Bible et de théologie en kiswahili, en anglais et en français. Les cours sont gratuits.</p>
-<p>Commencez par les Fondements de la Bible et de la théologie. Lisez la leçon, faites l’exercice et recevez les commentaires de votre enseignant.</p>
-<p><a href="courses.html">Catalogue des cours</a> · <a href="portal.html">Entrer en classe</a></p>
-<article><h2>Lire une leçon d’exemple</h2><h3>Lire un passage biblique dans son contexte</h3><p>Lisez 2 Timothée 3:14–17. Identifiez le destinataire de Paul et lisez les versets qui précèdent le verset 16. Observez le lien entre l’apprentissage des Écritures et la préparation aux bonnes œuvres.</p>
-<p>Exercice : avec vos propres mots, relevez deux usages des Écritures dans ce passage. Donnez un exemple d’application pour cette semaine.</p></article>
-<p><a class="btn" href="join-obts.html">Rejoindre OBTS</a></p></div></section>'''),
         "join-obts": ("Finaliser l’inscription",
             '''<section class="section"><div class="wrap"><h1>Finaliser l’inscription</h1>
 <p>Online Bible &amp; Theology School (OBTS) propose des cours de Bible et de théologie en kiswahili, en anglais et en français. Les cours sont gratuits.</p>
 <p>Commencez votre inscription sur WhatsApp. Vous y trouverez les tarifs applicables et les modalités de paiement.</p>
 <p><a class="btn" href="{enrollment_link}">Continuer sur WhatsApp</a></p>
-<p><a href="learn.html">Lire une leçon d’exemple</a></p></div></section>'''),
+<p><a href="learn.html">Voir les leçons d’exemple</a></p></div></section>'''),
     },
 }
 
 
+def sample_inline(text):
+    return re.sub(r"\*\*([^*]+)\*\*|\*([^*]+)\*",
+                  lambda match: (f"<strong>{match[1]}</strong>" if match[1] else f"<em>{match[2]}</em>"),
+                  e(text))
+
+
+def sample_lessons(lang):
+    with open(os.path.join(ROOT, "tools", "sample_lessons", f"{lang}.md"), encoding="utf-8") as source:
+        course_blocks = re.split(r"^## ", source.read(), flags=re.M)[1:]
+    title, intro, join = SAMPLE_LESSON_UI[lang]
+    course_links = []
+    sections = []
+    for course, block in zip(COURSES, course_blocks, strict=True):
+        code = course["code"]
+        heading, *lessons = re.split(r"^### ", block, flags=re.M)
+        if not heading.strip().endswith(f"({code})") or len(lessons) != 5:
+            raise ValueError(f"Expected five {code} sample lessons in {lang}")
+        anchor = code.lower()
+        name = e(course["name"][lang])
+        course_links.append(f'<li><a href="#{anchor}">{name}</a></li>')
+        entries = []
+        for lesson in lessons:
+            lesson_title, text = lesson.split("\n", 1)
+            paragraphs = []
+            for paragraph in re.split(r"\n\s*\n", text.strip()):
+                lines = "<br>".join(sample_inline(line.strip()) for line in paragraph.splitlines())
+                paragraphs.append(f"<p>{lines}</p>")
+            entries.append(f'<details class="sample-lesson"><summary>{e(lesson_title)}</summary>'
+                           f'<div class="sample-body">{"".join(paragraphs)}</div></details>')
+        sections.append(f'<section class="sample-course" id="{anchor}"><h2>{name}</h2>'
+                        f'{"".join(entries)}</section>')
+    return (f'<section class="page-head"><div class="wrap"><h1>{e(title)}</h1><p>{e(intro)}</p></div></section>'
+            f'<div class="wrap section"><ul class="sample-index">{"".join(course_links)}</ul>'
+            f'{"".join(sections)}<p><a class="btn navy" href="join-obts.html">{e(join)}</a></p></div>')
+
+
 def body(lang, page):
+    if page == "learn":
+        return SAMPLE_LESSON_UI[lang][0], sample_lessons(lang), False
     if page in LEARNING_PAGES[lang]:
         title, content = LEARNING_PAGES[lang][page]
         return title, content.replace("{enrollment_link}", wa_link("NAHITAJI KUJIUNGA")), False

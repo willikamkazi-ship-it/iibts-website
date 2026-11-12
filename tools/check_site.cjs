@@ -17,7 +17,8 @@ const pages = ['index', 'about', 'courses', 'how-to-learn', 'admissions', 'conta
   'library', 'bookstore', 'portal', 'assistant', 'syllabus', 'learn', 'join-obts'];
 const viewports = { phone: { width: 360, height: 780 }, tablet: { width: 820, height: 1180 }, desktop: { width: 1366, height: 900 } };
 const WA = 'https://wa.me/255704686885';
-const forbidden = [/TZS|Tsh\b|USD\b|shilingi/i, /[\w.]+@[\w.]+\.\w+/, /partner|partenaire|ushirikiano/i, /scholarship|bourse|udhamini/i,
+const currency = /TZS|Tsh\b|USD\b|shilingi/i;
+const forbidden = [/[\w.]+@[\w.]+\.\w+/, /partner|partenaire|ushirikiano/i, /scholarship|bourse|udhamini/i,
   /accredit|ithibati|accrédit/i, /IIBTS|International Institute/i, /lorem|ipsum|TODO|placeholder text/i,
   /RASIMU|INASUBIRI UKAGUZI|majibu\.pdf|mwongozo\.pdf|answer key\.pdf/];
 const failures = [];
@@ -32,6 +33,9 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
       const file = path.join(root, folder, page + '.html');
       const html = fs.readFileSync(file, 'utf8');
       const text = html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '');
+      // Sample exercises may use currency in teaching examples.
+      const publicCopy = text.replace(/<details class="sample-lesson">[\s\S]*?<\/details>/g, '');
+      ok(!currency.test(publicCopy), `${lang}/${page}`, 'no public enrollment prices');
       for (const pattern of forbidden) ok(!pattern.test(text), `${lang}/${page}`, `forbidden content ${pattern}`);
       ok(new RegExp(`<html lang="${lang}">`).test(html), `${lang}/${page}`, 'html lang attribute');
       // the school's official name, in every language: "Online Bible & Theology School" (never "... and Theology ...")
@@ -59,6 +63,23 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
         ok(errors.length === 0, where, 'script errors: ' + errors.join('; '));
         const width = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
         ok(width <= 0, where, `page scrolls sideways by ${width}px`);
+        if (name === 'learn') {
+          const lessons = page.locator('.sample-course .sample-lesson');
+          ok(await lessons.count() === 35, where, 'all 35 sample lessons are present');
+          const firstLesson = lessons.first();
+          await firstLesson.locator('summary').click();
+          ok(await firstLesson.locator('.sample-body').isVisible(), where, 'sample lesson opens');
+          await firstLesson.locator('summary').click();
+          ok(!(await firstLesson.locator('.sample-body').isVisible()), where, 'sample lesson closes');
+        }
+        if (name === 'courses') {
+          const samples = await page.locator('.card a[href^="learn.html#"]').evaluateAll(
+            (links) => links.map((link) => link.hash.slice(1)));
+          const learningPage = fs.readFileSync(path.join(root, folder, 'learn.html'), 'utf8');
+          ok(samples.length === 7 && new Set(samples).size === 7 &&
+            samples.every((id) => learningPage.includes(`class="sample-course" id="${id}"`)),
+            where, 'each course links to its own sample lessons');
+        }
         // Links and images.
         const links = await page.$$eval('a[href]', (as) => as.map((a) => a.getAttribute('href')));
         for (const href of links) {
