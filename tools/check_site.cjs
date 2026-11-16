@@ -19,7 +19,7 @@ const viewports = { phone: { width: 360, height: 780 }, tablet: { width: 820, he
 const WA = 'https://wa.me/255704686885';
 const currency = /TZS|Tsh\b|USD\b|shilingi/i;
 const forbidden = [/[\w.]+@[\w.]+\.\w+/, /partner|partenaire|ushirikiano/i, /guaranteed scholarships|bourses garanties|ufadhili wa uhakika/i,
-  /accredit|ithibati|accrédit/i, /IIBTS|International Institute/i, /lorem|ipsum|TODO|placeholder text/i,
+  /accredit|ithibati|accrédit/i, /International Institute/i, /lorem|ipsum|TODO|placeholder text/i,
   /RASIMU|INASUBIRI UKAGUZI|majibu\.pdf|mwongozo\.pdf|answer key\.pdf/];
 const failures = [];
 let checks = 0;
@@ -85,9 +85,11 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
         for (const href of links) {
           if (href.startsWith('https://wa.me/')) {
             const url = new URL(href);
-            const command = { portal: 'DASHBOARD', library: 'MAKTABA', 'join-obts': 'NAHITAJI KUJIUNGA' }[name];
-            ok(href === WA || (command && url.origin + url.pathname === WA &&
-              url.searchParams.size === 1 && url.searchParams.get('text') === command && !url.hash),
+            const commands = { portal: ['DASHBOARD'], library: ['MAKTABA'], 'join-obts': ['NAHITAJI KUJIUNGA'] }[name] || [];
+            if (lang === 'sw' && name === 'index') commands.push('AI MENYU WEBSITE');
+            if (lang === 'sw' && name === 'portal') commands.push('AI MENYU DASHBOARD');
+            ok(href === WA || (url.origin + url.pathname === WA &&
+              url.searchParams.size === 1 && commands.includes(url.searchParams.get('text')) && !url.hash),
               where, 'WhatsApp link ' + href);
             continue;
           }
@@ -123,6 +125,14 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
         }
         for (const section of ['library', 'research']) {
           ok(await page.isVisible(`#site-nav a[href="${section}.html"]`), where, `${section} is available in the main menu`);
+        }
+        if (name === 'about') {
+          await page.locator('.nav-more summary').click();
+          for (const id of ['vision', 'mission', 'values', 'story']) {
+            ok(await page.isVisible(`.nav-more a[href="about.html#${id}"]`), where, `${id} available in More`);
+            ok(await page.locator(`#${id}`).count() === 1, where, `${id} section exists`);
+          }
+          await page.locator('.nav-more summary').click();
         }
         // Language switch: each link opens the same page in that language.
         const switches = await page.$$eval('.lang a', (as) => as.map((a) => [a.getAttribute('hreflang'), a.getAttribute('href')]));
@@ -180,6 +190,7 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
         const command = name === 'library' ? 'MAKTABA' : 'DASHBOARD';
         ok(!html.includes(notOpen[lang]) && html.includes(`text=${command}`), `${lang}/${name}`, 'personal link requested through the school WhatsApp');
         const allowed = [WA, WA + '?text=' + command, 'https://odm-ai-asistant.onrender.com/library?lang=' + lang];
+        if (name === 'portal' && lang === 'sw') allowed.push(WA + '?text=AI%20MENYU%20DASHBOARD');
         ok(buttons.length > 0 && buttons.every((href) => allowed.includes(href)), `${lang}/${name}`, 'only verified service/WhatsApp buttons');
       } else {
         ok(html.includes(notOpen[lang]), `${lang}/${name}`, 'service shows that it is not yet open');

@@ -458,8 +458,9 @@ def service_page(lang, page):
     if is_open(page):
         browse = (f'<p><a class="btn navy" href="{e(library_url(lang))}">{e(OPEN_LIBRARY[lang])}</a></p>'
                   if page == 'library' else '')
+        digital_menu = '<section class="note"><h2>Mafunzo na huduma za kidijitali</h2><p>Fungua menyu ya WhatsApp upate maelezo ya Canva, CapCut, mitandao ya kijamii, AI, tovuti na database kabla ya kuchagua.</p><p><a class="btn navy" href="https://wa.me/255704686885?text=AI%20MENYU%20DASHBOARD">Fungua menyu kwenye WhatsApp</a></p></section>' if lang == "sw" and page == "portal" else ""
         return title, intro, (f'<p class="note">{e(CAMPUS_REQUEST[lang][4])}</p>' + browse
-                              + campus_entry(lang, page) + html_body + f'<p><a class="btn navy" href="{wa_link()}">{e(UI[lang]["ask"])}</a></p>')
+                              + campus_entry(lang, page) + digital_menu + html_body + f'<p><a class="btn navy" href="{wa_link()}">{e(UI[lang]["ask"])}</a></p>')
     status = (f'<div class="note gold"><strong>{e(UI[lang]["not_open"])}.</strong> {e(SERVICE_STATUS[lang].split(". ", 1)[1])}'
               f' <a href="{wa_link()}">{e(UI[lang]["ask"])}</a></div>')
     entry = campus_entry(lang, page) if page in ("portal", "library") else ""
@@ -534,6 +535,115 @@ def sample_lessons(lang):
             f'{"".join(sections)}<p><a class="btn navy" href="join-obts.html">{e(join)}</a></p></div>')
 
 
+ABOUT_SCHOOL = {'en': ('About OBTS',
+        'Study the Bible with care, ask honest questions and put what you learn into practice in your '
+        'church and community.',
+        (('vision',
+          'Vision',
+          'We want to see believers across nations understand the Bible, think carefully about what they '
+          'believe and serve others faithfully.'),
+         ('mission',
+          'Mission',
+          'We make Bible and theology education accessible online. We guide students through readings, '
+          'exercises and feedback so they can study with discipline wherever they live.'),
+         ('values',
+          'Our values',
+          'We read Scripture in context and name the sources we use. We expect students to do their own '
+          'work, listen to feedback and let what they learn shape how they live and serve.'),
+         ('story',
+          'Our story',
+          'Our online teaching began under the name IIBTS. Today we continue that work as the Online '
+          'Bible & Theology School (OBTS), helping church members, ministry workers and leaders study '
+          'while carrying on with their everyday responsibilities.'),
+         ('learning',
+          'What studying here looks like',
+          'Start with a sample lesson in English, Kiswahili or French. Read at your own pace, try the '
+          'exercise and see what you can explain in your own words. When you enroll, check which courses '
+          'are available in your language.'))),
+ 'sw': ('Kuhusu OBTS',
+        'Soma Biblia kwa makini, uliza maswali na tumia unachojifunza kutumikia kanisa lako na jamii '
+        'yako.',
+        (('vision',
+          'Dira yetu',
+          'Tunataka kuona waumini katika mataifa mbalimbali wakiielewa Biblia, wakifahamu msingi wa '
+          'imani yao na kuwahudumia wengine kwa uaminifu.'),
+         ('mission',
+          'Dhamira yetu',
+          'Tunatoa elimu ya Biblia na theolojia kwa njia ya mtandaoni. Kupitia usomaji, mazoezi na '
+          'mrejesho wa mkufunzi, tunamsaidia mwanafunzi kujenga nidhamu ya kusoma popote alipo.'),
+         ('values',
+          'Maadili yetu',
+          'Tunasoma Maandiko kwa kuzingatia muktadha na tunataja vyanzo tunavyotumia. Tunathamini '
+          'uaminifu katika kazi za darasani, kukubali kusahihishwa na kuonyesha kwa matendo kile '
+          'tunachojifunza.'),
+         ('story',
+          'Historia yetu',
+          'Tulianza kufundisha mtandaoni kwa jina la IIBTS. Leo tunaendeleza kazi hiyo kama Online Bible '
+          '& Theology School (OBTS). Tunawasaidia waumini, wahudumu na viongozi wa makanisa kusoma huku '
+          'wakiendelea na majukumu yao ya kila siku.'),
+         ('learning',
+          'Utajifunzaje hapa?',
+          'Anza kwa kusoma somo la mfano kwa Kiswahili, Kiingereza au Kifaransa. Soma kwa mwendo wako, '
+          'jaribu zoezi na ueleze ulichoelewa kwa maneno yako. Unapojiunga, uliza kozi zipi zinapatikana '
+          'kwa lugha yako.'))),
+ 'fr': ('À propos d’OBTS',
+        'Étudiez la Bible avec attention, posez vos questions et mettez en pratique ce que vous apprenez '
+        'dans votre Église et autour de vous.',
+        (('vision',
+          'Notre vision',
+          'Nous voulons que des croyants de différents pays comprennent la Bible, approfondissent leur '
+          'foi et servent les autres avec fidélité.'),
+         ('mission',
+          'Notre mission',
+          'Nous rendons les études bibliques et théologiques accessibles en ligne. Les lectures, les '
+          'exercices et les retours des enseignants aident chacun à étudier avec régularité, où qu’il '
+          'vive.'),
+         ('values',
+          'Nos valeurs',
+          'Nous lisons les Écritures dans leur contexte et citons nos sources. Nous attendons de chacun '
+          'un travail honnête, une écoute des conseils et une mise en pratique de ce qu’il apprend.'),
+         ('story',
+          'Notre histoire',
+          'Notre enseignement en ligne a commencé sous le nom d’IIBTS. Nous poursuivons aujourd’hui ce '
+          'travail sous le nom d’Online Bible & Theology School (OBTS), pour que les membres et les '
+          'responsables d’Église puissent étudier tout en assumant leurs responsabilités quotidiennes.'),
+         ('learning',
+          'Comment se passent les études ?',
+          'Commencez par une leçon d’exemple en français, en swahili ou en anglais. Lisez à votre '
+          'rythme, faites l’exercice et expliquez ce que vous avez compris avec vos propres mots. Au '
+          'moment de l’inscription, renseignez-vous sur les cours disponibles dans votre langue.')))}
+
+
+HOME_ACTIONS = {'en': '<div class="actions"><a class="btn" href="learn.html">Read sample lessons</a><a class="btn '
+       'secondary" href="join-obts.html">Join on WhatsApp</a></div>',
+ 'sw': '<div class="actions"><a class="btn" href="learn.html">Soma masomo ya mfano</a><a '
+       'class="btn secondary" href="join-obts.html">Jiunge kupitia WhatsApp</a><a class="btn '
+       'secondary" href="https://wa.me/255704686885?text=AI%20MENYU%20WEBSITE">Mafunzo na huduma '
+       'za kidijitali (WhatsApp)</a></div>',
+ 'fr': '<div class="actions"><a class="btn" href="learn.html">Lire les leçons d’exemple</a><a '
+       'class="btn secondary" href="join-obts.html">S’inscrire sur WhatsApp</a></div>'}
+
+HOME_INTRO = {'en': '<section class="section" aria-labelledby="obts-launch"><h2 id="obts-launch">Start learning '
+       'with OBTS</h2><p>Explore 35 sample lessons across seven courses. All 25 General Bible '
+       'Studies and Theology lessons (GB‑101 to GB‑125) are available in the student library in '
+       'Swahili, English and French. Submit your assessment for each lesson. Once your lecturer '
+       'reviews and accepts it, the next lesson unlocks.</p></section>',
+ 'sw': '<section class="section" aria-labelledby="uzinduzi-sw"><h2 id="uzinduzi-sw">Anza kujifunza '
+       'na OBTS</h2><p>Soma masomo 35 ya mfano katika kozi saba. Masomo yote 25 ya Mafunzo ya '
+       'Jumla ya Biblia na Theolojia (GB‑101 hadi GB‑125) yanapatikana kwenye maktaba ya wanafunzi '
+       'kwa Kiswahili, Kiingereza na Kifaransa. Wasilisha tathmini ya kila somo. Mhadhiri '
+       'akiisahihisha na kuikubali, somo linalofuata litafunguka.</p><p><a '
+       'href="learn.html#b66">Soma mifano ya kozi ya Vitabu 66 vya Biblia</a> · <a '
+       'href="library.html">Tembelea maktaba</a> · <a href="research.html">Tafuta mwongozo wa '
+       'utafiti</a></p></section>',
+ 'fr': '<section class="section" aria-labelledby="obts-launch"><h2 id="obts-launch">Commencez à '
+       'étudier avec OBTS</h2><p>Découvrez 35 leçons d’exemple réparties dans sept cours. Les 25 '
+       'leçons d’études bibliques générales et de théologie (GB‑101 à GB‑125) sont disponibles '
+       'dans la bibliothèque des étudiants en swahili, en anglais et en français. Remettez votre '
+       'évaluation après chaque leçon. La leçon suivante se débloque dès que votre enseignant a '
+       'corrigé et accepté votre travail.</p></section>'}
+
+
 def body(lang, page):
     if page == "learn":
         return SAMPLE_LESSON_UI[lang][0], sample_lessons(lang), False
@@ -557,13 +667,6 @@ def body(lang, page):
 <li>After sending your task, you open the answer key and receive feedback.</li></ol>
 <p><a href="how-to-learn.html">More about how to learn</a></p></section>
 {services_grid(lang)}</div>'''),
-            "about": ("About OBTS", "OBTS is an online school for Bible, theology and practical ministry skills.",
-                      f'''<p>The Online Bible &amp; Theology School (OBTS) teaches through lessons that a student can follow on an ordinary phone. The motto in its logo — <em>Biblical Truth • Theological Depth • Ministry Formation</em> — describes what the school aims at: understanding Scripture well, thinking carefully about Christian doctrine, and growing in the skills of ministry and service.</p>
-<h2>How OBTS teaches</h2><div class="grid">
-<div class="card"><h3>Structured lessons</h3><p>Every lesson states its objectives, gives a study plan in minutes, and ends with a task that shows what you learned.</p></div>
-<div class="card"><h3>Reviewed content</h3><p>Lessons are written, checked against their sources and reviewed by a lecturer before they are sent to students. Draft lessons are never sent.</p></div>
-<div class="card"><h3>Three languages</h3><p>The website is in English, Kiswahili and French. The first 25 lessons of General Bible Studies &amp; Theology (modules 1–3) have been written in all three languages and are being reviewed by lecturers; once approved, you receive them in the language you choose when you register. The other courses are written first in English (the AI course in Kiswahili); their Kiswahili and French versions are being prepared and reviewed.</p></div></div>
-<h2>Courses</h2><p>OBTS offers six courses, and a seventh on practical AI is being prepared. See <a href="courses.html">Courses</a>.</p>'''),
             "courses": ("Courses", "Seven courses, each divided into modules and taught lesson by lesson.",
                         f'''{course_cards(lang, with_photos=True)}
 <div class="note"><strong>Language of the lessons.</strong> General Bible Studies &amp; Theology (GB): lessons 1–25 (modules 1–3) have been written in English, Kiswahili and French and are being reviewed by lecturers. A lesson is sent only after a lecturer has approved it in that language; the student then receives it in the language chosen at registration, as a PDF lesson and summary pages on WhatsApp. B66, PE, ES, CL and ENT are written first in English and the AI course in Kiswahili; their Kiswahili and French versions are being prepared and checked, so ask admissions which language is available. Pastoral English and English Speaking teach English, so their exercises stay in English.</div>
@@ -606,13 +709,6 @@ def body(lang, page):
 <li>Baada ya kutuma kazi, unafungua majibu na kupokea mrejesho.</li></ol>
 <p><a href="how-to-learn.html">Zaidi kuhusu jinsi ya kujifunza</a></p></section>
 {services_grid(lang)}</div>'''),
-            "about": ("Kuhusu OBTS", "OBTS ni shule ya mtandaoni ya Biblia, theolojia na ujuzi wa vitendo wa huduma.",
-                      f'''<p>Online Bible &amp; Theology School (OBTS) inafundisha kupitia masomo ambayo mwanafunzi anaweza kuyafuata kwa simu ya kawaida. Kauli mbiu iliyo kwenye nembo yake — <em>Biblical Truth • Theological Depth • Ministry Formation</em> (Ukweli wa Biblia • Kina cha Theolojia • Malezi ya Huduma) — inaeleza lengo la shule: kuyaelewa Maandiko vizuri, kufikiri kwa makini kuhusu mafundisho ya Kikristo, na kukua katika ujuzi wa huduma.</p>
-<h2>OBTS inavyofundisha</h2><div class="grid">
-<div class="card"><h3>Masomo yenye mpangilio</h3><p>Kila somo linataja malengo yake, linatoa mpango wa kujifunza kwa dakika, na linamalizika kwa kazi inayoonyesha ulichojifunza.</p></div>
-<div class="card"><h3>Maudhui yaliyokaguliwa</h3><p>Masomo yanaandikwa, yanalinganishwa na vyanzo vyake na kukaguliwa na mhadhiri kabla ya kutumwa kwa wanafunzi. Rasimu hazitumwi kamwe.</p></div>
-<div class="card"><h3>Lugha tatu</h3><p>Tovuti iko kwa Kiingereza, Kiswahili na Kifaransa. Masomo 25 ya kwanza ya Mafunzo ya Jumla ya Biblia na Theolojia (moduli 1–3) yameandikwa kwa lugha zote tatu na yanakaguliwa na wahadhiri; yakishaidhinishwa, unayapokea kwa lugha utakayochagua wakati wa kujisajili. Kozi nyingine zinaandikwa kwanza kwa Kiingereza (kozi ya AI kwa Kiswahili); matoleo yake ya Kiswahili na Kifaransa yanaandaliwa na kukaguliwa.</p></div></div>
-<h2>Kozi</h2><p>OBTS inatoa kozi sita, na ya saba kuhusu matumizi ya AI inaandaliwa. Tazama <a href="courses.html">Kozi</a>.</p>'''),
             "courses": ("Kozi", "Kozi saba, kila moja imegawanywa katika moduli na kufundishwa somo kwa somo.",
                         f'''{course_cards(lang, with_photos=True)}
 <div class="note"><strong>Lugha ya masomo.</strong> Mafunzo ya Jumla ya Biblia na Theolojia (GB): masomo 1–25 (moduli 1–3) yameandikwa kwa Kiingereza, Kiswahili na Kifaransa na yanakaguliwa na wahadhiri. Somo linatumwa tu baada ya mhadhiri kuliidhinisha kwa lugha hiyo; kisha mwanafunzi analipokea kwa lugha aliyoichagua wakati wa kujisajili, kama somo la PDF pamoja na kurasa za muhtasari kwenye WhatsApp. B66, PE, ES, CL na ENT zinaandikwa kwanza kwa Kiingereza na kozi ya AI kwa Kiswahili; matoleo yake ya Kiswahili na Kifaransa yanaandaliwa na kukaguliwa, hivyo uliza ofisi ya usajili lugha inayopatikana. Kiingereza cha Kichungaji na Kuzungumza Kiingereza vinafundisha Kiingereza, hivyo mazoezi yake yanabaki kwa Kiingereza.</div>
@@ -654,13 +750,6 @@ def body(lang, page):
 <li>Après l'envoi, vous ouvrez le corrigé et recevez un retour.</li></ol>
 <p><a href="how-to-learn.html">En savoir plus sur la manière d'apprendre</a></p></section>
 {services_grid(lang)}</div>'''),
-            "about": ("À propos d'OBTS", "OBTS est une école en ligne de Bible, de théologie et de compétences pratiques pour le ministère.",
-                      f'''<p>L'Online Bible &amp; Theology School (OBTS) enseigne au moyen de leçons qu'un étudiant peut suivre sur un téléphone ordinaire. La devise de son logo — <em>Biblical Truth • Theological Depth • Ministry Formation</em> (Vérité biblique • Profondeur théologique • Formation au ministère) — décrit son but : bien comprendre l'Écriture, réfléchir avec soin à la doctrine chrétienne et grandir dans les compétences du ministère.</p>
-<h2>Comment OBTS enseigne</h2><div class="grid">
-<div class="card"><h3>Des leçons structurées</h3><p>Chaque leçon indique ses objectifs, donne un plan d'étude en minutes et se termine par une tâche qui montre ce que vous avez appris.</p></div>
-<div class="card"><h3>Un contenu révisé</h3><p>Les leçons sont écrites, vérifiées par rapport à leurs sources et révisées par un enseignant avant d'être envoyées aux étudiants. Les brouillons ne sont jamais envoyés.</p></div>
-<div class="card"><h3>Trois langues</h3><p>Le site est en anglais, en kiswahili et en français. Les 25 premières leçons des Études bibliques générales et théologie (modules 1 à 3) ont été rédigées dans les trois langues et sont en cours de vérification par des enseignants ; une fois approuvées, vous les recevez dans la langue choisie lors de votre inscription. Les autres cours sont d'abord écrits en anglais (le cours d'IA en kiswahili) ; leurs versions en kiswahili et en français sont en préparation et en vérification.</p></div></div>
-<h2>Cours</h2><p>OBTS propose six cours, et un septième sur l'usage pratique de l'IA est en préparation. Voir <a href="courses.html">Cours</a>.</p>'''),
             "courses": ("Cours", "Sept cours, chacun divisé en modules et enseigné leçon par leçon.",
                         f'''{course_cards(lang, with_photos=True)}
 <div class="note"><strong>Langue des leçons.</strong> Études bibliques générales et théologie (GB) : les leçons 1 à 25 (modules 1 à 3) ont été rédigées en anglais, en kiswahili et en français et sont en cours de vérification par des enseignants. Une leçon n'est envoyée qu'après son approbation par un enseignant dans cette langue ; l'étudiant la reçoit alors dans la langue choisie lors de l'inscription, sous forme de leçon PDF et de pages de résumé sur WhatsApp. B66, PE, ES, CL et ENT sont d'abord écrits en anglais et le cours d'IA en kiswahili ; leurs versions en kiswahili et en français sont en préparation et en vérification : demandez au service des inscriptions quelle langue est disponible. L'anglais pastoral et l'anglais oral enseignent l'anglais : leurs exercices restent en anglais.</div>
@@ -687,6 +776,14 @@ def body(lang, page):
             "privacy": ("Politique de confidentialité", "Comment OBTS utilise les informations que vous envoyez.", None),
             "terms": ("Conditions d'utilisation", "Les conditions d'utilisation de ce site et des documents d'OBTS.", None),
         }
+    if page == "about":
+        title, intro, sections = ABOUT_SCHOOL[lang]
+        school_sections = "".join(
+            f'<section id="{anchor}" class="school-info"><h2>{e(heading)}</h2><p>{e(copy)}</p></section>'
+            for anchor, heading, copy in sections
+        )
+        content[page] = (title, intro, school_sections +
+                         f'<p><a class="btn navy" href="learn.html">{e(NAV_LABELS[lang][3])}</a></p>')
     if page in SERVICES:
         content[page] = service_page(lang, page)
     if page in INSTITUTIONAL_PAGES[lang]:
@@ -699,7 +796,10 @@ def body(lang, page):
                                                     f'{e(SYLLABUS_TEXT[lang]["see"])}</a></p>')
     item = content[page]
     if page == "index":
-        return item[0], item[1], True
+        home = re.sub(r'<div class="actions">.*?</div>', HOME_ACTIONS[lang], item[1], count=1)
+        home = home.replace('<div class="wrap"><section class="section">',
+                            '<div class="wrap">' + HOME_INTRO[lang] + '<section class="section">', 1)
+        return item[0], home, True
     title, intro, html_body = item
     if html_body is None:
         html_body = {"admissions": admissions, "faq": faq, "privacy": privacy, "terms": terms,
@@ -944,6 +1044,18 @@ def page_html(lang, page):
     prefix = "../" if LANGS[lang] else ""
     assets = prefix + "assets/"
     nav = "".join(f'<a href="{p}.html"{CURRENT_PAGE if p == page else ""}>{e(label)}</a>' for p, label in zip(NAV, NAV_LABELS[lang]))
+    more_label = {"en": "More", "sw": "Zaidi", "fr": "Plus"}[lang]
+    school_links = "".join(
+        f'<a href="about.html#{anchor}">{e(heading)}</a>'
+        for anchor, heading, _ in ABOUT_SCHOOL[lang][2][:4]
+    )
+    more_pages = ("syllabus", "how-to-learn", "standards", "news", "support", "scholarships", "faq", "policies")
+    more_links = "".join(
+        f'<a href="{p}.html"{CURRENT_PAGE if p == page else ""}>{e(page_label(lang, p))}</a>'
+        for p in more_pages
+    )
+    nav += (f'<details class="nav-more"><summary>{e(more_label)}</summary>'
+            f'<div class="nav-more-links">{school_links}{more_links}</div></details>')
     switch = "".join(
         f'<a href="{prefix}{LANGS[code]}{page}.html" hreflang="{code}" lang="{code}" title="{LANG_NAME[code]}"'
         f'{CURRENT_LANG if code == lang else ""}>{LANG_LABEL[code]}</a>' for code in LANGS)
