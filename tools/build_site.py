@@ -33,7 +33,7 @@ DOMAIN = "obts.co.tz"
 # no page links to the system and the library says "not yet open". The staging address must never be put here.
 SERVICE_BASE = "https://odm-ai-asistant.onrender.com"
 PAGES = ("index", "about", "courses", "how-to-learn", "admissions", "contact", "faq", "privacy", "terms",
-         "library", "bookstore", "portal", "assistant", "syllabus", "learn", "join-obts", *INSTITUTIONAL_PAGES["en"])
+         "library", "bookstore", "portal", "assistant", "syllabus", "learn", "join-obts", "jiunge-gb", "jiunge-b66", "jiunge-ai", *INSTITUTIONAL_PAGES["en"])
 NAV = ("index", "about", "courses", "learn", "library", "research", "join-obts", "portal", "contact")
 NAV_LABELS = {
     "en": ("Home", "About the school", "Courses", "Learn", "Library", "Research", "Join", "My classroom", "Contact"),
@@ -490,17 +490,63 @@ JOIN_PAGES = {
 }
 
 
-def join_page(lang):
-    title, intro, descriptions, labels, sample_label = JOIN_PAGES[lang]
-    courses = {course["code"]: course["name"][lang] for course in COURSES}
+JOIN_COURSES = {
+    "GB": ("NAHITAJI KUJIUNGA", "gb"),
+    "B66": ("OBTS B66", "b66"),
+    "AI": ("AI CHAGUA AI WEBSITE", "ai"),
+}
+JOIN_DETAILS = {
+    "sw": ("Jumuiya ya OBTS", "Chagua kozi unayotaka. Kila kozi ina maelezo na hatua zake za kujiunga.",
+           "Fungua maelezo ya kozi", "Utajifunza nini?", "Rudi kwenye jumuiya ya OBTS", "Soma masomo ya mfano",
+           (("Asili, muundo na mamlaka ya Biblia.", "Mafundisho ya msingi ya Kikristo na jinsi yanavyohusiana.",
+             "Kusoma kifungu katika muktadha wake na kutumia ujumbe wake leo."),
+            ("Torati, historia, mashairi, hekima na ujumbe wa manabii.",
+             "Injili, Matendo ya Mitume, Nyaraka na Ufunuo.",
+             "Mazingira, muhtasari na ujumbe wa kila kitabu, kuanzia Mwanzo."),
+            ("Kuipa AI maelekezo yanayoeleweka na kuhakiki majibu yake.",
+             "Kuandaa maandishi ya matangazo, mipango ya video na majibu ya wateja.",
+             "Kutengeneza kazi ya mfano kwa biashara au kazi yako."))),
+    "en": ("OBTS community", "Choose a course to see what you will study and how to enroll.",
+           "View course details", "What you will learn", "Back to the OBTS community", "Read sample lessons",
+           (("The origin, structure and authority of the Bible.", "The foundations of Christian doctrine and how they fit together.",
+             "Reading passages in context and applying their message today."),
+            ("The Law, history, poetry, wisdom and the prophets.", "The Gospels, Acts, the Epistles and Revelation.",
+             "The setting, outline and message of each book, starting with Genesis."),
+            ("Giving AI clear instructions and checking its answers.", "Drafting ads, video outlines and customer replies.",
+             "Building a sample for your own work or business."))),
+    "fr": ("Communauté OBTS", "Choisissez un cours pour découvrir son contenu et les étapes d’inscription.",
+           "Voir le cours", "Ce que vous apprendrez", "Retour à la communauté OBTS", "Lire les leçons d’exemple",
+           (("L’origine, la structure et l’autorité de la Bible.", "Les fondements de la doctrine chrétienne et leurs liens.",
+             "Lire un passage dans son contexte et appliquer son message aujourd’hui."),
+            ("La Loi, les livres historiques, la poésie, la sagesse et les prophètes.",
+             "Les Évangiles, les Actes, les épîtres et l’Apocalypse.",
+             "Le contexte, le plan et le message de chaque livre à partir de la Genèse."),
+            ("Donner des instructions claires à l’IA et vérifier ses réponses.",
+             "Préparer des publicités, des vidéos et des réponses aux clients.",
+             "Créer un exemple pour votre travail ou votre activité."))),
+}
+
+
+def join_page(lang, page):
+    _, _, descriptions, labels, _ = JOIN_PAGES[lang]
+    title, intro, open_course, topics, back, sample, lessons = JOIN_DETAILS[lang]
+    names = {course["code"]: course["name"][lang] for course in COURSES}
     cards = []
-    for code, command, description, label in zip(
-            ("GB", "B66", "AI"), ("NAHITAJI KUJIUNGA", "OBTS B66", "AI CHAGUA AI WEBSITE"),
-            descriptions, labels):
-        sample = f'<p><a href="learn.html#b66">{e(sample_label)}</a></p>' if code == "B66" else ""
-        cards.append(f'<article class="card school-info" id="{code.lower()}">'
-                     f'<h2>{e(courses[code])} ({code})</h2><p>{e(description)}</p>'
-                     f'<p><a class="btn navy" href="{e(wa_link(command))}">{e(label)}</a></p>{sample}</article>')
+    for index, (code, (command, anchor)) in enumerate(JOIN_COURSES.items()):
+        course_title = f"{names[code]} ({code})"
+        if page == f"jiunge-{anchor}":
+            list_items = "".join(f"<li>{e(item)}</li>" for item in lessons[index])
+            sample_link = f'<p><a href="learn.html#{anchor}">{e(sample)}</a></p>' if code != "AI" else ""
+            return course_title, (
+                f'<section class="page-head"><div class="wrap"><h1>{e(course_title)}</h1>'
+                f'<p>{e(descriptions[index])}</p></div></section>'
+                f'<section class="wrap section"><h2>{e(topics)}</h2><ul>{list_items}</ul>'
+                f'<p><a class="btn navy" href="{e(wa_link(command))}">{e(labels[index])}</a></p>'
+                f'{sample_link}<p><a href="join-obts.html">{e(back)}</a></p></section>'
+            ), False
+        cards.append(f'<article class="card school-info" id="{anchor}"><h2>{e(course_title)}</h2>'
+                     f'<p>{e(descriptions[index])}</p><p><a class="btn navy" href="jiunge-{anchor}.html">'
+                     f'{e(open_course)} · {code}</a></p></article>')
     return title, (f'<section class="page-head"><div class="wrap"><h1>{e(title)}</h1><p>{e(intro)}</p></div></section>'
                    f'<div class="wrap section"><div class="grid">{"".join(cards)}</div></div>'), False
 
@@ -653,8 +699,8 @@ HOME_INTRO = {'en': '<section class="section" aria-labelledby="obts-launch"><h2 
 def body(lang, page):
     if page == "learn":
         return SAMPLE_LESSON_UI[lang][0], sample_lessons(lang), False
-    if page == "join-obts":
-        return join_page(lang)
+    if page == "join-obts" or page in ("jiunge-gb", "jiunge-b66", "jiunge-ai"):
+        return join_page(lang, page)
     ui = UI[lang]
     wa = wa_link()
     if lang == "en":
