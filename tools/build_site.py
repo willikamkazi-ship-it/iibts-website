@@ -33,7 +33,7 @@ DOMAIN = "obts.co.tz"
 # no page links to the system and the library says "not yet open". The staging address must never be put here.
 SERVICE_BASE = "https://odm-ai-asistant.onrender.com"
 PAGES = ("index", "about", "courses", "how-to-learn", "admissions", "contact", "faq", "privacy", "terms",
-         "library", "bookstore", "portal", "assistant", "syllabus", "learn", "join-obts", "jiunge-gb", "jiunge-b66", "jiunge-ai", *INSTITUTIONAL_PAGES["en"])
+         "library", "bookstore", "portal", "assistant", "syllabus", "learn", "join-obts", "jiunge-gb", "jiunge-b66", "jiunge-ai", "jiunge-pe", "jiunge-es", "jiunge-cl", "jiunge-ent", *INSTITUTIONAL_PAGES["en"])
 NAV = ("index", "about", "courses", "learn", "library", "research", "join-obts", "portal", "contact")
 NAV_LABELS = {
     "en": ("Home", "About the school", "Courses", "Learn", "Library", "Research", "Join", "My classroom", "Contact"),
@@ -493,6 +493,10 @@ JOIN_PAGES = {
 JOIN_COURSES = {
     "GB": ("NAHITAJI KUJIUNGA", "gb"),
     "B66": ("OBTS B66", "b66"),
+    "PE": ("OBTS KOZI PE", "pe"),
+    "ES": ("OBTS KOZI ES", "es"),
+    "CL": ("OBTS KOZI CL", "cl"),
+    "ENT": ("OBTS KOZI ENT", "ent"),
     "AI": ("AI CHAGUA AI WEBSITE", "ai"),
 }
 JOIN_DETAILS = {
@@ -530,22 +534,33 @@ JOIN_DETAILS = {
 def join_page(lang, page):
     _, _, descriptions, labels, _ = JOIN_PAGES[lang]
     title, intro, open_course, topics, back, sample, lessons = JOIN_DETAILS[lang]
-    names = {course["code"]: course["name"][lang] for course in COURSES}
+    courses = {course["code"]: course for course in COURSES}
+    specialized = dict(zip(("GB", "B66", "AI"), zip(descriptions, labels, lessons)))
+    ask_label = {"sw": "Uliza OBTS kuhusu kujiunga", "en": "Ask OBTS about enrollment",
+                 "fr": "Se renseigner auprès d’OBTS"}[lang]
+    entry_note = {
+        "sw": "Soma mifano ya masomo na uliza OBTS kuhusu nafasi na hatua za kujiunga kabla ya kulipa.",
+        "en": "Read sample lessons and ask OBTS about availability and enrollment before paying.",
+        "fr": "Lisez les leçons d’exemple et demandez à OBTS les places et les modalités avant de payer.",
+    }[lang]
     cards = []
-    for index, (code, (command, anchor)) in enumerate(JOIN_COURSES.items()):
-        course_title = f"{names[code]} ({code})"
+    for code, (command, anchor) in JOIN_COURSES.items():
+        course = courses[code]
+        course_title = f"{course['name'][lang]} ({code})"
+        description, label, course_lessons = specialized.get(code, (course['text'][lang], ask_label, ()))
         if page == f"jiunge-{anchor}":
-            list_items = "".join(f"<li>{e(item)}</li>" for item in lessons[index])
+            list_items = "".join(f"<li>{e(item)}</li>" for item in course_lessons)
+            subject = f'<ul>{list_items}</ul>' if list_items else f'<p>{e(entry_note)}</p>'
             sample_link = f'<p><a href="learn.html#{anchor}">{e(sample)}</a></p>' if code != "AI" else ""
             return course_title, (
                 f'<section class="page-head"><div class="wrap"><h1>{e(course_title)}</h1>'
-                f'<p>{e(descriptions[index])}</p></div></section>'
-                f'<section class="wrap section"><h2>{e(topics)}</h2><ul>{list_items}</ul>'
-                f'<p><a class="btn navy" href="{e(wa_link(command))}">{e(labels[index])}</a></p>'
+                f'<p>{e(description)}</p></div></section>'
+                f'<section class="wrap section"><h2>{e(topics)}</h2>{subject}'
+                f'<p><a class="btn navy" href="{e(wa_link(command))}">{e(label)}</a></p>'
                 f'{sample_link}<p><a href="join-obts.html">{e(back)}</a></p></section>'
             ), False
         cards.append(f'<article class="card school-info" id="{anchor}"><h2>{e(course_title)}</h2>'
-                     f'<p>{e(descriptions[index])}</p><p><a class="btn navy" href="jiunge-{anchor}.html">'
+                     f'<p>{e(description)}</p><p><a class="btn navy" href="jiunge-{anchor}.html">'
                      f'{e(open_course)} · {code}</a></p></article>')
     return title, (f'<section class="page-head"><div class="wrap"><h1>{e(title)}</h1><p>{e(intro)}</p></div></section>'
                    f'<div class="wrap section"><div class="grid">{"".join(cards)}</div></div>'), False
@@ -699,7 +714,7 @@ HOME_INTRO = {'en': '<section class="section" aria-labelledby="obts-launch"><h2 
 def body(lang, page):
     if page == "learn":
         return SAMPLE_LESSON_UI[lang][0], sample_lessons(lang), False
-    if page == "join-obts" or page in ("jiunge-gb", "jiunge-b66", "jiunge-ai"):
+    if page == "join-obts" or page.startswith("jiunge-"):
         return join_page(lang, page)
     ui = UI[lang]
     wa = wa_link()

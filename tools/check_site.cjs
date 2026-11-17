@@ -14,7 +14,7 @@ const root = path.resolve(__dirname, '..');
 const shots = process.argv[2];
 const langs = { en: '', sw: 'sw/', fr: 'fr/' };
 const pages = ['index', 'about', 'courses', 'how-to-learn', 'admissions', 'contact', 'faq', 'privacy', 'terms',
-  'library', 'bookstore', 'portal', 'assistant', 'syllabus', 'learn', 'join-obts', 'jiunge-gb', 'jiunge-b66', 'jiunge-ai', 'research', 'campus', 'news', 'scholarships', 'standards', 'support', 'policies'];
+  'library', 'bookstore', 'portal', 'assistant', 'syllabus', 'learn', 'join-obts', 'jiunge-gb', 'jiunge-b66', 'jiunge-pe', 'jiunge-es', 'jiunge-cl', 'jiunge-ent', 'jiunge-ai', 'research', 'campus', 'news', 'scholarships', 'standards', 'support', 'policies'];
 const viewports = { phone: { width: 360, height: 780 }, tablet: { width: 820, height: 1180 }, desktop: { width: 1366, height: 900 } };
 const WA = 'https://wa.me/255704686885';
 const currency = /TZS|Tsh\b|USD\b|shilingi/i;
@@ -85,7 +85,7 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
         for (const href of links) {
           if (href.startsWith('https://wa.me/')) {
             const url = new URL(href);
-            const commands = { portal: ['DASHBOARD'], library: ['MAKTABA'], 'jiunge-gb': ['NAHITAJI KUJIUNGA'], 'jiunge-b66': ['OBTS B66'], 'jiunge-ai': ['AI CHAGUA AI WEBSITE'] }[name] || [];
+            const commands = { portal: ['DASHBOARD'], library: ['MAKTABA'], 'jiunge-gb': ['NAHITAJI KUJIUNGA'], 'jiunge-b66': ['OBTS B66'], 'jiunge-pe': ['OBTS KOZI PE'], 'jiunge-es': ['OBTS KOZI ES'], 'jiunge-cl': ['OBTS KOZI CL'], 'jiunge-ent': ['OBTS KOZI ENT'], 'jiunge-ai': ['AI CHAGUA AI WEBSITE'] }[name] || [];
             if (lang === 'sw' && name === 'index') commands.push('AI MENYU WEBSITE');
             if (lang === 'sw' && name === 'portal') commands.push('AI MENYU DASHBOARD');
             ok(href === WA || (url.origin + url.pathname === WA &&
