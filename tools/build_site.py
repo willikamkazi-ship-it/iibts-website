@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 26203)
+Total output lines: 1269
+
 """
 Builds the OBTS public website (static HTML for GitHub Pages) from one
 content source, in English (root), Kiswahili (sw/) and French (fr/).
@@ -19,7 +22,7 @@ import json
 import os
 import re
 import sys
-from urllib.parse import urlsplit, urlencode
+from urllib.parse import urlsplit, urlencode, quote
 
 from institutional_pages import LIBRARY_LINKS, PAGES as INSTITUTIONAL_PAGES
 
@@ -531,6 +534,29 @@ JOIN_DETAILS = {
 }
 
 
+B66_ENTRY = {
+    "sw": ("Soma Biblia kuanzia Mwanzo hadi Ufunuo", "Hatua za kuanza B66",
+           ("Soma masomo ya mfano ya B66 hapa chini ili uone jinsi kila kitabu kinavyofundishwa.",
+            "Bonyeza kitufe cha WhatsApp hapa chini. Tuma ujumbe OBTS B66 ili kuomba taarifa za nafasi ya darasa.",
+            "Subiri OBTS ithibitishe nafasi na ikutumie maelekezo kabla ya kufanya malipo."),
+           "Uliza kuhusu nafasi ya B66 kwenye WhatsApp"),
+    "en": ("Read the Bible from Genesis to Revelation", "How to start B66",
+           ("Read the B66 sample lessons below to see how each book is taught.",
+            "Use the WhatsApp button below and send OBTS B66 to ask about class availability.",
+            "Wait for OBTS to confirm availability and send instructions before you pay."),
+           "Ask about B66 availability on WhatsApp"),
+    "fr": ("Lisez la Bible de la Genèse à l’Apocalypse", "Comment commencer B66",
+           ("Lisez les leçons d’exemple de B66 ci-dessous pour découvrir comment chaque livre est étudié.",
+            "Utilisez le bouton WhatsApp ci-dessous et envoyez OBTS B66 pour demander s’il reste des places.",
+            "Attendez la confirmation et les instructions d’OBTS avant de payer."),
+           "Se renseigner sur les places B66 sur WhatsApp"),
+}
+
+
+def b66_whatsapp():
+    return f"https://wa.me/{WHATSAPP}?text={quote('OBTS B66', safe='')}"
+
+
 def join_page(lang, page):
     _, _, descriptions, labels, _ = JOIN_PAGES[lang]
     title, intro, open_course, topics, back, sample, lessons = JOIN_DETAILS[lang]
@@ -549,6 +575,19 @@ def join_page(lang, page):
         course_title = f"{course['name'][lang]} ({code})"
         description, label, course_lessons = specialized.get(code, (course['text'][lang], ask_label, ()))
         if page == f"jiunge-{anchor}":
+            if code == "B66":
+                headline, step_title, steps, contact = B66_ENTRY[lang]
+                step_items = "".join(f"<li>{e(step)}</li>" for step in steps)
+                topic_items = "".join(f"<li>{e(item)}</li>" for item in course_lessons)
+                return course_title, (
+                    f'<section class="page-head"><div class="wrap"><h1>{e(course_title)}</h1>'
+                    f'<p>{e(headline)}</p></div></section>'
+                    f'<div class="wrap section"><h2>{e(topics)}</h2><ul>{topic_items}</ul>'
+                    f'<p><a class="btn navy" href="#b66">{e(sample)}</a></p>'
+                    f'<section><h2>{e(step_title)}</h2><ol>{step_items}</ol>'
+                    f'<p><a href="{e(b66_whatsapp())}">{e(contact)}</a></p></section>'
+                    f'{sample_lessons(lang, only="B66")}</div>'
+                ), False
             list_items = "".join(f"<li>{e(item)}</li>" for item in course_lessons)
             subject = f'<ul>{list_items}</ul>' if list_items else f'<p>{e(entry_note)}</p>'
             sample_link = f'<p><a href="learn.html#{anchor}">{e(sample)}</a></p>' if code != "AI" else ""
@@ -572,7 +611,7 @@ def sample_inline(text):
                   e(text))
 
 
-def sample_lessons(lang):
+def sample_lessons(lang, only=None):
     with open(os.path.join(ROOT, "tools", "sample_lessons", f"{lang}.md"), encoding="utf-8") as source:
         course_blocks = re.split(r"^## ", source.read(), flags=re.M)[1:]
     title, intro, join = SAMPLE_LESSON_UI[lang]
@@ -580,6 +619,8 @@ def sample_lessons(lang):
     sections = []
     for course, block in zip(COURSES, course_blocks, strict=True):
         code = course["code"]
+        if only and code != only:
+            continue
         heading, *lessons = re.split(r"^### ", block, flags=re.M)
         if not heading.strip().endswith(f"({code})") or len(lessons) != 5:
             raise ValueError(f"Expected five {code} sample lessons in {lang}")
@@ -597,6 +638,8 @@ def sample_lessons(lang):
                            f'<div class="sample-body">{"".join(paragraphs)}</div></details>')
         sections.append(f'<section class="sample-course" id="{anchor}"><h2>{name}</h2>'
                         f'{"".join(entries)}</section>')
+    if only:
+        return "".join(sections)
     return (f'<section class="page-head"><div class="wrap"><h1>{e(title)}</h1><p>{e(intro)}</p></div></section>'
             f'<div class="wrap section"><ul class="sample-index">{"".join(course_links)}</ul>'
             f'{"".join(sections)}<p><a class="btn navy" href="join-obts.html">{e(join)}</a></p></div>')
@@ -644,20 +687,7 @@ ABOUT_SCHOOL = {'en': ('About OBTS',
           'uaminifu katika kazi za darasani, kukubali kusahihishwa na kuonyesha kwa matendo kile '
           'tunachojifunza.'),
          ('story',
-          'Historia yetu',
-          'Tulianza kufundisha mtandaoni kwa jina la IIBTS. Leo tunaendeleza kazi hiyo kama Online Bible '
-          '& Theology School (OBTS). Tunawasaidia waumini, wahudumu na viongozi wa makanisa kusoma huku '
-          'wakiendelea na majukumu yao ya kila siku.'),
-         ('learning',
-          'Utajifunzaje hapa?',
-          'Anza kwa kusoma somo la mfano kwa Kiswahili, Kiingereza au Kifaransa. Soma kwa mwendo wako, '
-          'jaribu zoezi na ueleze ulichoelewa kwa maneno yako. Unapojiunga, uliza kozi zipi zinapatikana '
-          'kwa lugha yako.'))),
- 'fr': ('À propos d’OBTS',
-        'Étudiez la Bible avec attention, posez vos questions et mettez en pratique ce que vous apprenez '
-        'dans votre Église et autour de vous.',
-        (('vision',
-          'Notre vision',
+    …203 tokens truncated…re vision',
           'Nous voulons que des croyants de différents pays comprennent la Bible, approfondissent leur '
           'foi et servent les autres avec fidélité.'),
          ('mission',
@@ -1107,6 +1137,7 @@ def syllabus(lang):
 def page_html(lang, page):
     ui = UI[lang]
     title, main, is_home = body(lang, page)
+    contact_url = b66_whatsapp() if page == "jiunge-b66" else wa_link()
     prefix = "../" if LANGS[lang] else ""
     assets = prefix + "assets/"
     nav = "".join(f'<a href="{p}.html"{CURRENT_PAGE if p == page else ""}>{e(label)}</a>' for p, label in zip(NAV, NAV_LABELS[lang]))
@@ -1177,9 +1208,9 @@ def page_html(lang, page):
 <footer class="site-footer"><div class="wrap"><div class="foot">
 <div><img src="{assets}img/obts-seal-192.png" width="72" height="72" alt=""><p>{e(ui["foot_about"])}</p><p>{e(ui["tagline"])}</p></div>
 <div><h3>{e(ui["foot_links"])}</h3><ul>{footer_links}</ul></div>
-<div><h3>{e(ui["foot_contact"])}</h3><ul><li>{e(ui["wa"])}: <a href="{wa_link()}">{WHATSAPP_DISPLAY}</a></li><li>{DOMAIN}</li></ul></div>
+<div><h3>{e(ui["foot_contact"])}</h3><ul><li>{e(ui["wa"])}: <a href="{e(contact_url)}">{WHATSAPP_DISPLAY}</a></li><li>{DOMAIN}</li></ul></div>
 </div><div class="copy">© 2026 {e(ui["copy"])}</div></div></footer>
-<a class="wa-float" href="{wa_link()}" aria-label="WhatsApp {WHATSAPP_DISPLAY}">WhatsApp</a>
+<a class="wa-float" href="{e(contact_url)}" aria-label="WhatsApp {WHATSAPP_DISPLAY}">WhatsApp</a>
 <script src="{assets}js/campus-link.js"></script>
 <script src="{assets}js/site.js"></script>
 </body>
