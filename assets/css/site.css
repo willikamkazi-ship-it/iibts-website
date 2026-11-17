@@ -154,3 +154,8 @@ td.nowrap { white-space: nowrap; }
   .nav-more summary { padding: 12px 10px; font-size: 1rem; }
   .nav-more-links { position: static; max-height: none; box-shadow: none; margin-left: 10px; }
 }
+
+.course-guide { max-width: 800px; margin: 0 auto 2rem; }
+.course-guide video { display: block; width: 100%; height: auto; background: var(--navy);
+  border: 1px solid var(--line); border-radius: 12px; }
+.course-guide p { margin: .6rem 0; }

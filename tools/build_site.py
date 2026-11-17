@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 26203)
-Total output lines: 1269
-
 """
 Builds the OBTS public website (static HTML for GitHub Pages) from one
 content source, in English (root), Kiswahili (sw/) and French (fr/).
@@ -601,8 +598,25 @@ def join_page(lang, page):
         cards.append(f'<article class="card school-info" id="{anchor}"><h2>{e(course_title)}</h2>'
                      f'<p>{e(description)}</p><p><a class="btn navy" href="jiunge-{anchor}.html">'
                      f'{e(open_course)} · {code}</a></p></article>')
-    return title, (f'<section class="page-head"><div class="wrap"><h1>{e(title)}</h1><p>{e(intro)}</p></div></section>'
-                   f'<div class="wrap section"><div class="grid">{"".join(cards)}</div></div>'), False
+    video_title, video_help, courses_title = {
+        "sw": ("Tazama mwongozo wa kozi na usajili", "Gusa Cheza kusikiliza maelezo kwa Kiswahili.", "Chagua kozi yako"),
+        "en": ("Watch the course and enrollment guide", "Tap Play to listen. Narration is in Kiswahili.", "Choose your course"),
+        "fr": ("Regardez le guide des cours et des inscriptions", "Appuyez sur Lecture. La narration est en kiswahili.", "Choisissez votre cours"),
+    }[lang]
+    guide = (
+        f'<section class="course-guide" aria-labelledby="course-guide-title">'
+        f'<h2 id="course-guide-title">{e(video_title)}</h2>'
+        '<video controls autoplay playsinline preload="metadata" width="1280" height="720" '
+        'poster="{assets}media/obts-mwongozo.jpg" aria-labelledby="course-guide-title">'
+        '<source src="{assets}media/obts-mwongozo.mp4" type="video/mp4">'
+        '<track src="{assets}media/obts-mwongozo-sw.vtt" kind="captions" srclang="sw" label="Kiswahili">'
+        f'<a href="{{assets}}media/obts-mwongozo.mp4">{e(video_title)}</a></video>'
+        f'<p>{e(video_help)}</p></section>'
+    )
+    return title, (f'<section class="page-head"><div class="wrap"><h1>{e(title)}</h1></div></section>'
+                   f'<div class="wrap section">{guide}<section aria-labelledby="choose-course">'
+                   f'<h2 id="choose-course">{e(courses_title)}</h2><div class="grid">'
+                   f'{"".join(cards)}</div></section></div>'), False
 
 
 def sample_inline(text):
@@ -687,7 +701,20 @@ ABOUT_SCHOOL = {'en': ('About OBTS',
           'uaminifu katika kazi za darasani, kukubali kusahihishwa na kuonyesha kwa matendo kile '
           'tunachojifunza.'),
          ('story',
-    …203 tokens truncated…re vision',
+          'Historia yetu',
+          'Tulianza kufundisha mtandaoni kwa jina la IIBTS. Leo tunaendeleza kazi hiyo kama Online Bible '
+          '& Theology School (OBTS). Tunawasaidia waumini, wahudumu na viongozi wa makanisa kusoma huku '
+          'wakiendelea na majukumu yao ya kila siku.'),
+         ('learning',
+          'Utajifunzaje hapa?',
+          'Anza kwa kusoma somo la mfano kwa Kiswahili, Kiingereza au Kifaransa. Soma kwa mwendo wako, '
+          'jaribu zoezi na ueleze ulichoelewa kwa maneno yako. Unapojiunga, uliza kozi zipi zinapatikana '
+          'kwa lugha yako.'))),
+ 'fr': ('À propos d’OBTS',
+        'Étudiez la Bible avec attention, posez vos questions et mettez en pratique ce que vous apprenez '
+        'dans votre Église et autour de vous.',
+        (('vision',
+          'Notre vision',
           'Nous voulons que des croyants de différents pays comprennent la Bible, approfondissent leur '
           'foi et servent les autres avec fidélité.'),
          ('mission',
