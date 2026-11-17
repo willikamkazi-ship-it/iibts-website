@@ -471,32 +471,38 @@ def service_page(lang, page):
 # Page bodies
 # ------------------------------------------------------------
 
-LEARNING_PAGES = {
-    "en": {
-        "join-obts": ("Complete enrollment",
-            '''<section class="section"><div class="wrap"><h1>Complete enrollment</h1>
-<p>Online Bible &amp; Theology School (OBTS) offers Bible and theology lessons in Swahili, English and French. Lessons are free.</p>
-<p>Start your enrollment on WhatsApp and follow the instructions from OBTS.</p>
-<p><a class="btn" href="{enrollment_link}">Continue on WhatsApp</a></p>
-<p><a href="learn.html">Browse sample lessons</a></p></div></section>'''),
-    },
-    "sw": {
-        "join-obts": ("Kamilisha usajili",
-            '''<section class="section"><div class="wrap"><h1>Kamilisha usajili</h1>
-<p>Online Bible &amp; Theology School (OBTS) hutoa masomo ya Biblia na theolojia kwa Kiswahili, Kiingereza na Kifaransa. Masomo ni bure.</p>
-<p>Anza usajili kwenye WhatsApp na ufuate maelekezo ya OBTS.</p>
-<p><a class="btn" href="{enrollment_link}">Endelea kwenye WhatsApp</a></p>
-<p><a href="learn.html">Soma masomo ya mfano</a></p></div></section>'''),
-    },
-    "fr": {
-        "join-obts": ("Finaliser l’inscription",
-            '''<section class="section"><div class="wrap"><h1>Finaliser l’inscription</h1>
-<p>Online Bible &amp; Theology School (OBTS) propose des cours de Bible et de théologie en kiswahili, en anglais et en français. Les cours sont gratuits.</p>
-<p>Commencez votre inscription sur WhatsApp et suivez les instructions d’OBTS.</p>
-<p><a class="btn" href="{enrollment_link}">Continuer sur WhatsApp</a></p>
-<p><a href="learn.html">Voir les leçons d’exemple</a></p></div></section>'''),
-    },
+JOIN_PAGES = {
+    "sw": ("Chagua kozi ya OBTS", "Fungua maelezo ya kozi unayotaka kuanza.",
+           ("Jifunze misingi ya Biblia na mafundisho ya Kikristo. WhatsApp itakuongoza kwenye usajili na kueleza mchango wa uendeshaji kabla ya malipo.",
+            "Soma Biblia kitabu baada ya kitabu, kuanzia Mwanzo hadi Ufunuo. Masomo ya mfano yanapatikana. Uliza OBTS kuhusu nafasi na maelekezo kabla ya kulipa.",
+            "Jifunze kutumia AI katika kazi au biashara. WhatsApp itaonyesha gharama ya kozi hii, muda wa ufikiaji na hatua za malipo."),
+           ("Anza usajili wa GB", "Uliza kuhusu B66", "Angalia maelezo na malipo ya AI"), "Soma masomo ya mfano ya B66"),
+    "en": ("Choose an OBTS course", "Open the details for the course you would like to take.",
+           ("Study the foundations of Scripture and Christian doctrine. WhatsApp will guide you through enrollment and explain the operating contribution before payment.",
+            "Explore the Bible book by book, from Genesis to Revelation. Sample lessons are available. Ask OBTS about enrollment before making a payment.",
+            "Learn to use AI for work or business. WhatsApp explains the price, access period and payment instructions for this course."),
+           ("Start GB enrollment", "Ask about B66", "See AI course and payment details"), "Read sample B66 lessons"),
+    "fr": ("Choisissez un cours d’OBTS", "Ouvrez les informations sur le cours que vous souhaitez suivre.",
+           ("Étudiez les fondements de la Bible et de la doctrine chrétienne. Sur WhatsApp, OBTS vous guide dans l’inscription et explique la contribution avant le paiement.",
+            "Découvrez la Bible livre par livre, de la Genèse à l’Apocalypse. Des leçons d’exemple sont disponibles. Renseignez-vous sur l’inscription avant de payer.",
+            "Apprenez à utiliser l’IA au travail ou dans votre activité. WhatsApp indique le prix, la durée d’accès et les modalités de paiement de ce cours."),
+           ("Commencer l’inscription à GB", "Se renseigner sur B66", "Voir les informations et le paiement pour l’IA"), "Lire les leçons d’exemple de B66"),
 }
+
+
+def join_page(lang):
+    title, intro, descriptions, labels, sample_label = JOIN_PAGES[lang]
+    courses = {course["code"]: course["name"][lang] for course in COURSES}
+    cards = []
+    for code, command, description, label in zip(
+            ("GB", "B66", "AI"), ("NAHITAJI KUJIUNGA", "OBTS B66", "AI CHAGUA AI WEBSITE"),
+            descriptions, labels):
+        sample = f'<p><a href="learn.html#b66">{e(sample_label)}</a></p>' if code == "B66" else ""
+        cards.append(f'<article class="card school-info" id="{code.lower()}">'
+                     f'<h2>{e(courses[code])} ({code})</h2><p>{e(description)}</p>'
+                     f'<p><a class="btn navy" href="{e(wa_link(command))}">{e(label)}</a></p>{sample}</article>')
+    return title, (f'<section class="page-head"><div class="wrap"><h1>{e(title)}</h1><p>{e(intro)}</p></div></section>'
+                   f'<div class="wrap section"><div class="grid">{"".join(cards)}</div></div>'), False
 
 
 def sample_inline(text):
@@ -647,9 +653,8 @@ HOME_INTRO = {'en': '<section class="section" aria-labelledby="obts-launch"><h2 
 def body(lang, page):
     if page == "learn":
         return SAMPLE_LESSON_UI[lang][0], sample_lessons(lang), False
-    if page in LEARNING_PAGES[lang]:
-        title, content = LEARNING_PAGES[lang][page]
-        return title, content.replace("{enrollment_link}", wa_link("NAHITAJI KUJIUNGA")), False
+    if page == "join-obts":
+        return join_page(lang)
     ui = UI[lang]
     wa = wa_link()
     if lang == "en":

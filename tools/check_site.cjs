@@ -85,7 +85,7 @@ const ok = (condition, where, what) => { checks++; if (!condition) fail(where, w
         for (const href of links) {
           if (href.startsWith('https://wa.me/')) {
             const url = new URL(href);
-            const commands = { portal: ['DASHBOARD'], library: ['MAKTABA'], 'join-obts': ['NAHITAJI KUJIUNGA'] }[name] || [];
+            const commands = { portal: ['DASHBOARD'], library: ['MAKTABA'], 'join-obts': ['NAHITAJI KUJIUNGA', 'OBTS B66', 'AI CHAGUA AI WEBSITE'] }[name] || [];
             if (lang === 'sw' && name === 'index') commands.push('AI MENYU WEBSITE');
             if (lang === 'sw' && name === 'portal') commands.push('AI MENYU DASHBOARD');
             ok(href === WA || (url.origin + url.pathname === WA &&
