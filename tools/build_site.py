@@ -603,6 +603,11 @@ def join_page(lang, page):
         "en": ("Watch the course and enrollment guide", "Tap Play to listen. Narration is in Kiswahili.", "Choose your course"),
         "fr": ("Regardez le guide des cours et des inscriptions", "Appuyez sur Lecture. La narration est en kiswahili.", "Choisissez votre cours"),
     }[lang]
+    audio_title, audio_help = {
+        "sw": ("Sikiliza tangazo kamili (dakika 5)", "Sauti hii ni ya Kiswahili."),
+        "en": ("Listen to the full announcement (5 minutes)", "Audio is in Kiswahili."),
+        "fr": ("Écouter l’annonce complète (5 minutes)", "Audio en kiswahili."),
+    }[lang]
     guide = (
         f'<section class="course-guide" aria-labelledby="course-guide-title">'
         f'<h2 id="course-guide-title">{e(video_title)}</h2>'
@@ -611,7 +616,11 @@ def join_page(lang, page):
         '<source src="{assets}media/obts-mwongozo.mp4" type="video/mp4">'
         '<track src="{assets}media/obts-mwongozo-sw.vtt" kind="captions" srclang="sw" label="Kiswahili">'
         f'<a href="{{assets}}media/obts-mwongozo.mp4">{e(video_title)}</a></video>'
-        f'<p>{e(video_help)}</p></section>'
+        f'<h3>{e(audio_title)}</h3>'
+        f'<audio class="course-guide-audio" controls preload="metadata" aria-label="{e(audio_title)}">'
+        '<source src="{assets}media/tangazo-obts-dk5-sw.m4a" type="audio/mp4">'
+        f'<a href="{{assets}}media/tangazo-obts-dk5-sw.m4a">{e(audio_title)}</a></audio>'
+        f'<p>{e(audio_help)}</p><p>{e(video_help)}</p></section>'
     )
     return title, (f'<section class="page-head"><div class="wrap"><h1>{e(title)}</h1></div></section>'
                    f'<div class="wrap section">{guide}<section aria-labelledby="choose-course">'

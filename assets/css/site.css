@@ -156,6 +156,7 @@ td.nowrap { white-space: nowrap; }
 }
 
 .course-guide { max-width: 800px; margin: 0 auto 2rem; }
+.course-guide video, .course-guide audio { display: block; width: 100%; max-width: 800px; margin: 0 auto 1rem; }
 .course-guide video { display: block; width: 100%; height: auto; background: var(--navy);
   border: 1px solid var(--line); border-radius: 12px; }
 .course-guide p { margin: .6rem 0; }
