@@ -1202,7 +1202,14 @@ def page_html(lang, page):
     preview = f'<div class="preview">{e(ui["preview"])}</div>' if PREVIEW else ""
     # the page's own lead sentence describes it in search results and link previews; the home page uses the school's
     lead = re.search(r'<section class="page-head">.*?<p>(.*?)</p>', main, re.S)
-    description = html.unescape(lead.group(1)) if lead and not is_home else ui["foot_about"]
+    if page == "join-obts":
+        description = {
+            "en": "Listen to the five-minute announcement or watch the course and enrollment guide. Narration is in Kiswahili.",
+            "sw": "Sikiliza tangazo la dakika tano au tazama mwongozo wa kozi na usajili. Maelezo yako kwa Kiswahili.",
+            "fr": "Écoutez l’annonce de cinq minutes ou regardez le guide des cours et des inscriptions. La narration est en kiswahili.",
+        }[lang]
+    else:
+        description = html.unescape(lead.group(1)) if lead and not is_home else ui["foot_about"]
     url = f"https://{DOMAIN}/{LANGS[lang]}{'' if page == 'index' else page + '.html'}"
     share = (f'<link rel="canonical" href="{url}">\n'
              f'<meta property="og:site_name" content="OBTS — Online Bible &amp; Theology School">\n'
