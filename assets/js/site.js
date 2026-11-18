@@ -24,6 +24,27 @@
     });
   });
 
+
+  // Persistent OBTS AI help button: open the school's WhatsApp assistant
+  // with the current page context so learners can ask about a course or lesson.
+  var pageLanguage = (document.documentElement.lang || 'sw').toLowerCase().split('-')[0];
+  var pageHeading = document.querySelector('main h1');
+  var pageTitle = ((pageHeading && pageHeading.textContent) || document.title || 'OBTS').trim().slice(0, 120);
+  var aiMessages = {
+    sw: 'Nahitaji msaada wa AI kuhusu somo au usajili wa OBTS. Ukurasa nilipo: ' + pageTitle + ' (' + window.location.href + '). Nifafanulie hatua kwa hatua; usinipatie majibu ya tathmini.',
+    en: 'I need OBTS AI help with a lesson or registration. Page: ' + pageTitle + ' (' + window.location.href + '). Please explain step by step and do not give me assessment answers.',
+    fr: 'J’ai besoin de l’aide IA de l’OBTS pour une leçon ou l’inscription. Page : ' + pageTitle + ' (' + window.location.href + '). Expliquez étape par étape sans donner les réponses aux évaluations.'
+  };
+  var aiLabels = { sw: 'Uliza AI', en: 'Ask AI', fr: 'Demander à l’IA' };
+  var aiHelpLink = document.createElement('a');
+  aiHelpLink.className = 'ai-float';
+  aiHelpLink.href = 'https://wa.me/255704686885?text=' + encodeURIComponent(aiMessages[pageLanguage] || aiMessages.sw);
+  aiHelpLink.textContent = aiLabels[pageLanguage] || aiLabels.sw;
+  aiHelpLink.setAttribute('aria-label', aiLabels[pageLanguage] || aiLabels.sw);
+  aiHelpLink.target = '_blank';
+  aiHelpLink.rel = 'noopener';
+  document.body.appendChild(aiHelpLink);
+
   var form = document.getElementById('registration');
   if (!form) return;
   var t = JSON.parse(form.getAttribute('data-text'));
