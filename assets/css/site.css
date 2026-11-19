@@ -165,3 +165,10 @@ td.nowrap { white-space: nowrap; }
 .course-guide video { display: block; width: 100%; height: auto; background: var(--navy);
   border: 1px solid var(--line); border-radius: 12px; }
 .course-guide p { margin: .6rem 0; }
+
+.course-image-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 1rem 0; }
+.course-image-pair .course-photo { aspect-ratio: 16 / 9; object-fit: cover; margin: 0; border-radius: 8px; }
+.course-card { align-self: start; }
+.course-guide.card { max-width: 900px; margin: 0 auto 2rem; }
+.course-guide audio { margin-top: 1rem; }
+@media (max-width: 520px) { .course-image-pair { gap: 6px; } }
